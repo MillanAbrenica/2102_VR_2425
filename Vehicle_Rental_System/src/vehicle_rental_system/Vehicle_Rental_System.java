@@ -9,6 +9,7 @@ public class Vehicle_Rental_System {
         LoginFrame.setVisible(true);
         LoginFrame.pack();
         LoginFrame.setLocationRelativeTo(null); 
+        
     }
     
 }

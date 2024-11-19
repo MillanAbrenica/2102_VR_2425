@@ -16,6 +16,7 @@ public class UpdateCarFrame extends javax.swing.JFrame {
     public UpdateCarFrame() {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        formWindowOpened();
     }
 
     @SuppressWarnings("unchecked")
@@ -24,7 +25,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         BackToMenuBtn = new javax.swing.JButton();
-        CarIDtxtf = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         Brandtxtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -36,8 +36,8 @@ public class UpdateCarFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         UpdateBtn = new javax.swing.JButton();
+        carIDcombobox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("UPDATE CARS");
@@ -55,15 +55,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             }
         });
         jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
-
-        CarIDtxtf.setBackground(new java.awt.Color(0, 0, 0));
-        CarIDtxtf.setForeground(new java.awt.Color(255, 255, 255));
-        CarIDtxtf.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CarIDtxtfActionPerformed(evt);
-            }
-        });
-        jPanel1.add(CarIDtxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 85, 186, -1));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Car ID");
@@ -137,11 +128,15 @@ public class UpdateCarFrame extends javax.swing.JFrame {
         });
         jPanel1.add(UpdateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, -1, -1));
 
+        carIDcombobox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                carIDcomboboxActionPerformed(evt);
+            }
+        });
+        jPanel1.add(carIDcombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 190, -1));
+
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards_add.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 350));
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 50, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,13 +179,18 @@ public class UpdateCarFrame extends javax.swing.JFrame {
         String dbUser = "root";
         String dbPassword = "";
 
-        String carID = CarIDtxtf.getText();
         String brand = Brandtxtf.getText();
         String model = Modeltxtf.getText();
         String year = Yeartxtf.getText();
         String price = Pricetxtf.getText();
+        String selectedCarID = (String) carIDcombobox.getSelectedItem();
 
-        if (carID.isEmpty() || brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
+        if (selectedCarID == null) {
+            JOptionPane.showMessageDialog(new JFrame(), "Please select a Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
             JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -199,26 +199,51 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Update query for updating car details based on CarID
+            // First, check if the car is available
+            String checkQuery = "SELECT IsAvailable FROM Cars WHERE CarID = ?";
+            PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+            checkStmt.setString(1, selectedCarID);
+
+            ResultSet rs = checkStmt.executeQuery();
+            if (!rs.next()) {
+                JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                rs.close();
+                checkStmt.close();
+                con.close();
+                return;
+            }
+
+            boolean isAvailable = rs.getBoolean("IsAvailable");
+            rs.close();
+            checkStmt.close();
+
+            if (!isAvailable) {
+                JOptionPane.showMessageDialog(new JFrame(), "The selected car is not available for updates.", "Error", JOptionPane.ERROR_MESSAGE);
+                con.close();
+                return;
+            }
+
+            // Update query for updating car details
             String query = "UPDATE Cars SET Brand = ?, Model = ?, Year = ?, Price = ? WHERE CarID = ?";
             PreparedStatement pst = con.prepareStatement(query);
 
-            pst.setString(1, brand);                
-            pst.setString(2, model);                
-            pst.setInt(3, Integer.parseInt(year));  
+            pst.setString(1, brand);
+            pst.setString(2, model);
+            pst.setInt(3, Integer.parseInt(year));
             pst.setDouble(4, Double.parseDouble(price));
-            pst.setInt(5, Integer.parseInt(carID)); 
+            pst.setString(5, selectedCarID);
 
             int rowsUpdated = pst.executeUpdate();
 
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(new JFrame(), "Car updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                CarIDtxtf.setText("");
+                // Clear text fields and reset combo box selection
                 Brandtxtf.setText("");
                 Modeltxtf.setText("");
                 Yeartxtf.setText("");
                 Pricetxtf.setText("");
+                carIDcombobox.setSelectedIndex(-1);
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -231,14 +256,85 @@ public class UpdateCarFrame extends javax.swing.JFrame {
         } catch (ClassNotFoundException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Error: Please enter valid numbers for Car ID, Year, and Price.", "Input Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(new JFrame(), "Error: Please enter valid numbers for Year and Price.", "Input Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_UpdateBtnActionPerformed
 
-    private void CarIDtxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarIDtxtfActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CarIDtxtfActionPerformed
+    private void carIDcomboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carIDcomboboxActionPerformed
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
 
+        String selectedCarID = (String) carIDcombobox.getSelectedItem();
+
+        if (selectedCarID != null) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+                // Fetch car details for the selected CarID
+                String query = "SELECT Brand, Model, Year, Price FROM Cars WHERE CarID = ?";
+                PreparedStatement pst = con.prepareStatement(query);
+                pst.setString(1, selectedCarID);
+                ResultSet rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    Brandtxtf.setText(rs.getString("Brand"));
+                    Modeltxtf.setText(rs.getString("Model"));
+                    Yeartxtf.setText(rs.getString("Year"));
+                    Pricetxtf.setText(rs.getString("Price"));
+                } else {
+                    // Clear fields if no car is found (optional)
+                    Brandtxtf.setText("");
+                    Modeltxtf.setText("");
+                    Yeartxtf.setText("");
+                    Pricetxtf.setText("");
+                    JOptionPane.showMessageDialog(new JFrame(), "No car found for the selected Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                rs.close();
+                pst.close();
+                con.close();
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            } catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_carIDcomboboxActionPerformed
+
+    
+    
+    private void formWindowOpened() {                                      
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+            // Fetch car IDs from the database
+            String query = "SELECT CarID FROM Cars";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+
+            // Populate the JComboBox
+            while (rs.next()) {
+                carIDcombobox.addItem(rs.getString("CarID"));
+            }
+
+            rs.close();
+            pst.close();
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }                      
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -251,12 +347,11 @@ public class UpdateCarFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenuBtn;
     private javax.swing.JTextField Brandtxtf;
-    private javax.swing.JTextField CarIDtxtf;
     private javax.swing.JTextField Modeltxtf;
     private javax.swing.JTextField Pricetxtf;
     private javax.swing.JButton UpdateBtn;
     private javax.swing.JTextField Yeartxtf;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> carIDcombobox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

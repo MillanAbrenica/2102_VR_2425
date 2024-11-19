@@ -1,5 +1,7 @@
 
 package vehicle_rental_system;
+import Home_Admin.*;
+import Home_Client.*;
 import Home_Client.Home_client;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,7 +33,7 @@ public class Login extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         password = new javax.swing.JPasswordField();
         LoginBtn = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        SignupBtn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
 
@@ -83,13 +85,13 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(102, 102, 102));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("Sign Up");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        SignupBtn.setBackground(new java.awt.Color(102, 102, 102));
+        SignupBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        SignupBtn.setForeground(new java.awt.Color(255, 255, 255));
+        SignupBtn.setText("Sign Up");
+        SignupBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                SignupBtnActionPerformed(evt);
             }
         });
 
@@ -107,17 +109,18 @@ public class Login extends javax.swing.JFrame {
                         .addComponent(jLabel1))
                     .addGroup(LeftLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
-                        .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(LoginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2)
-                            .addComponent(email)
-                            .addComponent(jLabel3)
-                            .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LeftLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton2)
-                                .addGap(112, 112, 112)))))
+                        .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel2)
+                                .addComponent(email)
+                                .addComponent(jLabel3)
+                                .addComponent(password, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LeftLayout.createSequentialGroup()
+                                    .addComponent(jLabel4)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(SignupBtn)
+                                    .addGap(112, 112, 112)))
+                            .addComponent(LoginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
         LeftLayout.setVerticalGroup(
@@ -137,7 +140,7 @@ public class Login extends javax.swing.JFrame {
                 .addComponent(LoginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(LeftLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
+                    .addComponent(SignupBtn)
                     .addComponent(jLabel4))
                 .addGap(69, 69, 69))
         );
@@ -161,66 +164,75 @@ public class Login extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void SignupBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignupBtnActionPerformed
 
         SignUp SignUpFrame = new SignUp();
         SignUpFrame.setVisible(true);
         SignUpFrame.pack();
         SignUpFrame.setLocationRelativeTo(null);
         this.dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_SignupBtnActionPerformed
 
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-        // System.out.println("Sign up btn clicked");
-        String Email, Password, query, fname = null, passDb = null;
-        String SUrl, SUser, SPass;
-        SUrl = "Jdbc:MySql://localhost:3306/user_database";
-        SUser = "root";
-        SPass = "";
-        int notFound = 0;
+         String Email, Password, query, fname = null, passDb = null, roleDb = null;
+         String SUrl, SUser, SPass;
+         SUrl = "Jdbc:MySql://localhost:3306/vehiclerentaldb";
+         SUser = "root";
+         SPass = "";
+         int notFound = 0;
 
-        try{
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
-            Statement st = con.createStatement();
-            if("".equals(email.getText())){
-                JOptionPane.showMessageDialog(new JFrame(), "Email Address is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }else if("".equals(password.getText())){
-                JOptionPane.showMessageDialog(new JFrame(), "Password is require", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            }else{
-                Email    = email.getText();
-                Password = password.getText();
+         try {
+             Class.forName("com.mysql.cj.jdbc.Driver");
+             Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
+             Statement st = con.createStatement();
 
-                query = "SELECT * FROM client WHERE email= '"+Email+"'";
-                ResultSet rs = st.executeQuery(query);
-                while(rs.next()){
-                    passDb = rs.getString("password");
-                    fname = rs.getString("full_name");
-                    notFound = 1;
-                }
+             if ("".equals(email.getText())) {
+                 JOptionPane.showMessageDialog(new JFrame(), "Email Address is required", "Error",
+                         JOptionPane.ERROR_MESSAGE);
+             } else if ("".equals(password.getText())) {
+                 JOptionPane.showMessageDialog(new JFrame(), "Password is required", "Error",
+                         JOptionPane.ERROR_MESSAGE);
+             } else {
+                 Email = email.getText();
+                 Password = password.getText();
 
-                if(notFound == 1 && Password.equals(passDb)){
-                    Home_client HomeFrame = new Home_client();
-                    HomeFrame.setVisible(true);
-                    HomeFrame.pack();
-                    HomeFrame.setLocationRelativeTo(null);
-                    this.dispose();
-                }else{
-                    JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
-                        JOptionPane.ERROR_MESSAGE);
-                }
-                password.setText("");
-            }
-        }catch(Exception e){
-            System.out.println("Error" + e.getMessage());
-        }
+                 // Query to check both admin and client tables
+                 query = "SELECT * FROM admin WHERE email= '" + Email + "' UNION SELECT * FROM client WHERE email= '" + Email + "'";
+                 ResultSet rs = st.executeQuery(query);
 
+                 while (rs.next()) {
+                     passDb = rs.getString("password");
+                     fname = rs.getString("full_name");
+                     roleDb = rs.getString("role");
+                     notFound = 1;
+                 }
+
+                 if (notFound == 1 && Password.equals(passDb)) {
+                     if ("Admin".equalsIgnoreCase(roleDb)) {
+                         Home_admin HomeFrame = new Home_admin(); // Admin home page
+                         HomeFrame.setVisible(true);
+                         HomeFrame.pack();
+                         HomeFrame.setLocationRelativeTo(null);
+                     } else if ("Client".equalsIgnoreCase(roleDb)) {
+                         Home_client HomeFrame = new Home_client(); // Client home page
+                         HomeFrame.setVisible(true);
+                         HomeFrame.pack();
+                         HomeFrame.setLocationRelativeTo(null);
+                     }
+                     this.dispose(); // Close the login frame
+                 } else {
+                     JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
+                             JOptionPane.ERROR_MESSAGE);
+                 }
+                 password.setText("");
+             }
+         } catch (Exception e) {
+                System.out.println("Error: " + e.getMessage());
+         }
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_passwordActionPerformed
 
     private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
@@ -235,8 +247,8 @@ public class Login extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel Left;
     private javax.swing.JButton LoginBtn;
+    private javax.swing.JButton SignupBtn;
     private javax.swing.JTextField email;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

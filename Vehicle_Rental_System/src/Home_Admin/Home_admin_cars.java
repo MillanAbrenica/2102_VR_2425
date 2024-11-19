@@ -26,10 +26,9 @@ public class Home_admin_cars extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         UpadateBtn = new javax.swing.JButton();
         RemoveBtn = new javax.swing.JButton();
-        QuitBtn = new javax.swing.JButton();
         AddBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        viewCarsTable = new javax.swing.JTable();
         BackToMenuBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -48,7 +47,7 @@ public class Home_admin_cars extends javax.swing.JFrame {
                 UpadateBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(UpadateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 180, 110, 40));
+        jPanel1.add(UpadateBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 110, 40));
 
         RemoveBtn.setBackground(new java.awt.Color(0, 0, 0));
         RemoveBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -58,17 +57,7 @@ public class Home_admin_cars extends javax.swing.JFrame {
                 RemoveBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(RemoveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 180, 110, 40));
-
-        QuitBtn.setBackground(new java.awt.Color(255, 255, 255));
-        QuitBtn.setForeground(new java.awt.Color(0, 0, 0));
-        QuitBtn.setText("Quit");
-        QuitBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                QuitBtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(QuitBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, 110, 40));
+        jPanel1.add(RemoveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 300, 110, 40));
 
         AddBtn.setBackground(new java.awt.Color(0, 0, 0));
         AddBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -78,50 +67,50 @@ public class Home_admin_cars extends javax.swing.JFrame {
                 AddBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(AddBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 110, 40));
+        jPanel1.add(AddBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 180, 110, 40));
 
-        jTable1.setBackground(new java.awt.Color(51, 51, 51));
-        jTable1.setForeground(new java.awt.Color(255, 255, 255));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        viewCarsTable.setBackground(new java.awt.Color(51, 51, 51));
+        viewCarsTable.setForeground(new java.awt.Color(255, 255, 255));
+        viewCarsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Car ID", "Brand", "Model", "Year", "Price"
+                "Car ID", "Brand", "Model", "Year", "Price", "Availability"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(viewCarsTable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 0, 380, 500));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 0, 470, 500));
 
         BackToMenuBtn.setBackground(new java.awt.Color(255, 255, 255));
         BackToMenuBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -137,7 +126,7 @@ public class Home_admin_cars extends javax.swing.JFrame {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("NextStop Rentals");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 40, 320, 80));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 320, 80));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -167,10 +156,6 @@ public class Home_admin_cars extends javax.swing.JFrame {
              RemoveCarFrame.setLocationRelativeTo(null); 
     }//GEN-LAST:event_RemoveBtnActionPerformed
 
-    private void QuitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitBtnActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_QuitBtnActionPerformed
-
     private void AddBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddBtnActionPerformed
              AddCarFrame AddCarFrame = new AddCarFrame();
              AddCarFrame.setVisible(true);
@@ -186,8 +171,9 @@ public class Home_admin_cars extends javax.swing.JFrame {
 
    
     public void loadCarsIntoTable() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) viewCarsTable.getModel();
 
+        // Clear existing rows in the table
         model.setRowCount(0);
 
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
@@ -195,22 +181,29 @@ public class Home_admin_cars extends javax.swing.JFrame {
         String dbPassword = "";
 
         try {
+            // Establish database connection
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            String query = "SELECT CarID, Brand, Model, Year, Price FROM Cars";
+            // Query to select all required columns including isAvailable
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable FROM Cars";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
+            // Iterate through result set and populate table rows
             while (rs.next()) {
                 int carID = rs.getInt("CarID");
                 String brand = rs.getString("Brand");
                 String modelText = rs.getString("Model");
                 int year = rs.getInt("Year");
                 double price = rs.getDouble("Price");
+                boolean isAvailable = rs.getBoolean("isAvailable");
 
-                model.addRow(new Object[]{carID, brand, modelText, year, price});
+                // Add row to table, displaying "Available" or "Not Available"
+                String availabilityText = isAvailable ? "Available" : "Not Available";
+                model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
             }
 
+            // Close resources
             rs.close();
             stmt.close();
             con.close();
@@ -275,12 +268,11 @@ public class Home_admin_cars extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddBtn;
     private javax.swing.JButton BackToMenuBtn;
-    private javax.swing.JButton QuitBtn;
     private javax.swing.JButton RemoveBtn;
     private javax.swing.JButton UpadateBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable viewCarsTable;
     // End of variables declaration//GEN-END:variables
 }

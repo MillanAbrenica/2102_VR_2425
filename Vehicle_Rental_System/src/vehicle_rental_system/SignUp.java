@@ -7,6 +7,8 @@ import java.sql.Statement;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.showMessageDialog;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class SignUp extends javax.swing.JFrame {
 
@@ -102,19 +104,19 @@ public class SignUp extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(44, 44, 44)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel5)
-                                .addComponent(fname)
-                                .addComponent(jLabel6)
-                                .addComponent(emailAddress, javax.swing.GroupLayout.DEFAULT_SIZE, 332, Short.MAX_VALUE)
-                                .addComponent(jLabel7)
-                                .addComponent(pass))
-                            .addComponent(SignUpBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel3Layout.createSequentialGroup()
                                 .addComponent(jLabel8)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(loginShowBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(24, Short.MAX_VALUE))
+                                .addComponent(loginShowBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(SignUpBtn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(fname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 353, Short.MAX_VALUE)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(emailAddress, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING)))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,46 +175,53 @@ public class SignUp extends javax.swing.JFrame {
     }//GEN-LAST:event_loginShowBtnActionPerformed
 
     private void SignUpBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SignUpBtnActionPerformed
-       // System.out.println("Sign up btn clicked");
-       String fullName, email, Password,  query;
-       String SUrl, SUser, SPass;
-       SUrl = "Jdbc:MySql://localhost:3306/user_database";
-       SUser = "root";
-       SPass = "";
-       
-       try{
-           Class.forName("com.mysql.cj.jdbc.Driver");
-           Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
-           Statement st = con.createStatement();
-           if("".equals(fname.getText())){
-               JOptionPane.showMessageDialog(new JFrame(), "Full Name is require", "Error", 
-                       JOptionPane.ERROR_MESSAGE);
-           }else if("".equals(emailAddress.getText())){
-               JOptionPane.showMessageDialog(new JFrame(), "Email Address is require", "Error", 
-                       JOptionPane.ERROR_MESSAGE);
-           }else if("".equals(pass.getText())){
-               JOptionPane.showMessageDialog(new JFrame(), "Password is require", "Error", 
-                       JOptionPane.ERROR_MESSAGE);
-           }else{
-           fullName = fname.getText();
-           email    = emailAddress.getText();
-           Password = pass.getText();
-           System.out.println(Password);
-           
-           query = "INSERT INTO client(full_name, email, password)" + 
-                   "VALUES('"+fullName+"' , '"+email+"' , '"+Password+"')";
-           
-           st.execute(query);
-           fname.setText("");
-           emailAddress.setText("");
-           pass.setText("");
-           
-           showMessageDialog(null, "New account has been created successfully!");
-           
-           }
-       }catch(Exception e){
-           System.out.println("Error" + e.getMessage());
-       }
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        // Retrieve input values
+        String fullName = fname.getText();
+        String email = emailAddress.getText();
+        String password = pass.getText();
+
+        // Check for empty fields
+        if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+            String query = "INSERT INTO client (full_name, email, password, role) VALUES (?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(query);
+
+            pst.setString(1, fullName);  
+            pst.setString(2, email);     
+            pst.setString(3, password);  
+            pst.setString(4, "Client");  
+
+            int rowsInserted = pst.executeUpdate();
+
+            if (rowsInserted > 0) {
+                JOptionPane.showMessageDialog(new JFrame(), "New account has been created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                // Clear input fields
+                fname.setText("");
+                emailAddress.setText("");
+                pass.setText("");
+            }
+
+            // Close resources
+            pst.close();
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_SignUpBtnActionPerformed
 
     /**

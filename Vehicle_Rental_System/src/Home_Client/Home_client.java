@@ -139,7 +139,6 @@ public class Home_client extends javax.swing.JFrame {
              ReturnCarFrame.setVisible(true);
              ReturnCarFrame.pack();
              ReturnCarFrame.setLocationRelativeTo(null); 
-             this.dispose();
     }//GEN-LAST:event_ReturnBtnActionPerformed
 
     private void ShowMyRentsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowMyRentsBtnActionPerformed
@@ -147,7 +146,6 @@ public class Home_client extends javax.swing.JFrame {
              ShowRentsFrame.setVisible(true);
              ShowRentsFrame.pack();
              ShowRentsFrame.setLocationRelativeTo(null); 
-             this.dispose();
     }//GEN-LAST:event_ShowMyRentsBtnActionPerformed
 
     private void EditMyDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditMyDataBtnActionPerformed

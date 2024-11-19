@@ -4,6 +4,15 @@
  */
 package Home_Client;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author acer
@@ -15,6 +24,7 @@ public class ReserveCarFrame extends javax.swing.JFrame {
      */
     public ReserveCarFrame() {
         initComponents();
+        loadCarsIntoTable();
     }
 
     /**
@@ -28,27 +38,136 @@ public class ReserveCarFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         BackToMenuBtn = new javax.swing.JButton();
+        ReserveBtn = new javax.swing.JButton();
+        Yeartxt = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        CarIDTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        Modeltxt = new javax.swing.JTextField();
+        jSpinner1 = new javax.swing.JSpinner();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        DateStartSpinner = new javax.swing.JSpinner();
+        jLabel6 = new javax.swing.JLabel();
+        Brandtxt = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        ReserveCarsTable = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RESERVE");
 
-        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BackToMenuBtn.setBackground(new java.awt.Color(255, 255, 255));
-        BackToMenuBtn.setForeground(new java.awt.Color(0, 0, 0));
         BackToMenuBtn.setText("Back To Main Menu");
         BackToMenuBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 571, -1, -1));
+        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 350, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
+        ReserveBtn.setText("Reserve Car");
+        ReserveBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReserveBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 350, -1, -1));
+
+        Yeartxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                YeartxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Yeartxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 205, 160, 20));
+
+        jLabel2.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Car ID");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 100, -1, -1));
+
+        CarIDTxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CarIDTxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(CarIDTxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 100, 160, 20));
+
+        jLabel3.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Model");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 135, -1, -1));
+
+        Modeltxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ModeltxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Modeltxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 135, 160, 20));
+
+        jSpinner1.setModel(new javax.swing.SpinnerDateModel());
+        jPanel1.add(jSpinner1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 275, 150, -1));
+
+        jLabel4.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Year");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 205, -1, -1));
+
+        jLabel5.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Date End");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 275, -1, -1));
+
+        DateStartSpinner.setModel(new javax.swing.SpinnerDateModel());
+        jPanel1.add(DateStartSpinner, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, 150, -1));
+
+        jLabel6.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Brand");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 170, -1, -1));
+
+        Brandtxt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BrandtxtActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Brandtxt, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 170, 160, 20));
+
+        ReserveCarsTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String [] {
+                "Car ID ", "Model", "Brand", "Year", "Price ", "Availability"
+            }
+        ));
+        jScrollPane1.setViewportView(ReserveCarsTable);
+
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(382, 40, 480, 520));
+
+        jLabel7.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 240, -1, -1));
+
+        jLabel8.setBackground(new java.awt.Color(255, 250, 250));
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Date Start");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -70,6 +189,70 @@ public class ReserveCarFrame extends javax.swing.JFrame {
         mainMenu.setVisible(true);
     }//GEN-LAST:event_BackToMenuBtnActionPerformed
 
+    private void ReserveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveBtnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ReserveBtnActionPerformed
+
+    private void YeartxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YeartxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_YeartxtActionPerformed
+
+    private void CarIDTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarIDTxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CarIDTxtActionPerformed
+
+    private void ModeltxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModeltxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ModeltxtActionPerformed
+
+    private void BrandtxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrandtxtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BrandtxtActionPerformed
+
+    
+    public void loadCarsIntoTable() {
+        DefaultTableModel model = (DefaultTableModel) ReserveCarsTable.getModel();
+
+        // Clear existing rows in the table
+        model.setRowCount(0);
+
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try {
+            // Establish database connection
+            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+            // Query to select all required columns including isAvailable
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable FROM Cars";
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+
+            // Iterate through result set and populate table rows
+            while (rs.next()) {
+                int carID = rs.getInt("CarID");
+                String brand = rs.getString("Brand");
+                String modelText = rs.getString("Model");
+                int year = rs.getInt("Year");
+                double price = rs.getDouble("Price");
+                boolean isAvailable = rs.getBoolean("isAvailable");
+
+                // Add row to table, displaying "Available" or "Not Available"
+                String availabilityText = isAvailable ? "Available" : "Not Available";
+                model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+            }
+
+            // Close resources
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -99,6 +282,10 @@ public class ReserveCarFrame extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -110,7 +297,22 @@ public class ReserveCarFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenuBtn;
+    private javax.swing.JTextField Brandtxt;
+    private javax.swing.JTextField CarIDTxt;
+    private javax.swing.JSpinner DateStartSpinner;
+    private javax.swing.JTextField Modeltxt;
+    private javax.swing.JButton ReserveBtn;
+    private javax.swing.JTable ReserveCarsTable;
+    private javax.swing.JTextField Yeartxt;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner jSpinner1;
     // End of variables declaration//GEN-END:variables
 }
