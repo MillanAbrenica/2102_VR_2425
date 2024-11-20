@@ -1,6 +1,7 @@
 package Home_Client;
 
 import javax.swing.JOptionPane;
+import vehicle_rental_system.Login;
 
 
 public class Home_client extends javax.swing.JFrame {
@@ -16,12 +17,10 @@ public class Home_client extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         ViewBtn = new javax.swing.JButton();
-        RentBtn = new javax.swing.JButton();
-        ReturnBtn = new javax.swing.JButton();
+        RentAndReserveBtn = new javax.swing.JButton();
         ShowMyReservesBtn = new javax.swing.JButton();
         ShowMyRentsBtn = new javax.swing.JButton();
-        EditMyDataBtn = new javax.swing.JButton();
-        QuitBtn = new javax.swing.JButton();
+        LogOutBtn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -39,27 +38,17 @@ public class Home_client extends javax.swing.JFrame {
                 ViewBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ViewBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 130, 40));
+        jPanel1.add(ViewBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 410, 40));
 
-        RentBtn.setBackground(new java.awt.Color(255, 255, 255));
-        RentBtn.setForeground(new java.awt.Color(0, 0, 0));
-        RentBtn.setText("Rent Car");
-        RentBtn.addActionListener(new java.awt.event.ActionListener() {
+        RentAndReserveBtn.setBackground(new java.awt.Color(255, 255, 255));
+        RentAndReserveBtn.setForeground(new java.awt.Color(0, 0, 0));
+        RentAndReserveBtn.setText("Rent And ReserveCar");
+        RentAndReserveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RentBtnActionPerformed(evt);
+                RentAndReserveBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(RentBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 160, 110, 40));
-
-        ReturnBtn.setBackground(new java.awt.Color(0, 0, 0));
-        ReturnBtn.setForeground(new java.awt.Color(255, 255, 255));
-        ReturnBtn.setText("Return Car");
-        ReturnBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReturnBtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(ReturnBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 130, 40));
+        jPanel1.add(RentAndReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 410, 40));
 
         ShowMyReservesBtn.setBackground(new java.awt.Color(255, 255, 255));
         ShowMyReservesBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -69,7 +58,7 @@ public class Home_client extends javax.swing.JFrame {
                 ShowMyReservesBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ShowMyReservesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 130, 40));
+        jPanel1.add(ShowMyReservesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 410, 40));
 
         ShowMyRentsBtn.setBackground(new java.awt.Color(0, 0, 0));
         ShowMyRentsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -79,27 +68,17 @@ public class Home_client extends javax.swing.JFrame {
                 ShowMyRentsBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ShowMyRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 240, 110, 40));
+        jPanel1.add(ShowMyRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 410, 40));
 
-        EditMyDataBtn.setBackground(new java.awt.Color(255, 255, 255));
-        EditMyDataBtn.setForeground(new java.awt.Color(0, 0, 0));
-        EditMyDataBtn.setText("Edit My Data");
-        EditMyDataBtn.addActionListener(new java.awt.event.ActionListener() {
+        LogOutBtn.setBackground(new java.awt.Color(0, 0, 0));
+        LogOutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        LogOutBtn.setText("Log Out");
+        LogOutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EditMyDataBtnActionPerformed(evt);
+                LogOutBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(EditMyDataBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 130, 40));
-
-        QuitBtn.setBackground(new java.awt.Color(0, 0, 0));
-        QuitBtn.setForeground(new java.awt.Color(255, 255, 255));
-        QuitBtn.setText("Quit");
-        QuitBtn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                QuitBtnActionPerformed(evt);
-            }
-        });
-        jPanel1.add(QuitBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, 110, 40));
+        jPanel1.add(LogOutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, 110, 40));
 
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/menu.png"))); // NOI18N
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
@@ -118,13 +97,13 @@ public class Home_client extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void RentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentBtnActionPerformed
+    private void RentAndReserveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentAndReserveBtnActionPerformed
              RentNReserveCarFrame RentCarFrame = new RentNReserveCarFrame();
              RentCarFrame.setVisible(true);
              RentCarFrame.pack();
              RentCarFrame.setLocationRelativeTo(null); 
              this.dispose();
-    }//GEN-LAST:event_RentBtnActionPerformed
+    }//GEN-LAST:event_RentAndReserveBtnActionPerformed
 
     private void ViewBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ViewBtnActionPerformed
              ViewCarsFrame ViewCarsFrame = new ViewCarsFrame();
@@ -134,13 +113,6 @@ public class Home_client extends javax.swing.JFrame {
              this.dispose();    
     }//GEN-LAST:event_ViewBtnActionPerformed
 
-    private void ReturnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnBtnActionPerformed
-             ReturnCarFrame ReturnCarFrame = new ReturnCarFrame();
-             ReturnCarFrame.setVisible(true);
-             ReturnCarFrame.pack();
-             ReturnCarFrame.setLocationRelativeTo(null); 
-    }//GEN-LAST:event_ReturnBtnActionPerformed
-
     private void ShowMyRentsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowMyRentsBtnActionPerformed
              ShowRentsFrame ShowRentsFrame = new ShowRentsFrame();
              ShowRentsFrame.setVisible(true);
@@ -148,29 +120,21 @@ public class Home_client extends javax.swing.JFrame {
              ShowRentsFrame.setLocationRelativeTo(null); 
     }//GEN-LAST:event_ShowMyRentsBtnActionPerformed
 
-    private void EditMyDataBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditMyDataBtnActionPerformed
-             EditDataFrame EditDataFrame = new EditDataFrame();
-             EditDataFrame.setVisible(true);
-             EditDataFrame.pack();
-             EditDataFrame.setLocationRelativeTo(null); 
-             this.dispose();
-    }//GEN-LAST:event_EditMyDataBtnActionPerformed
-
     private void ShowMyReservesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowMyReservesBtnActionPerformed
              ShowReservesFrame ShowReservesFrame = new ShowReservesFrame();
              ShowReservesFrame.setVisible(true);
              ShowReservesFrame.pack();
              ShowReservesFrame.setLocationRelativeTo(null); 
-             this.dispose();
     }//GEN-LAST:event_ShowMyReservesBtnActionPerformed
 
-    private void QuitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitBtnActionPerformed
-        System.exit(0);
-    }//GEN-LAST:event_QuitBtnActionPerformed
+    private void LogOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutBtnActionPerformed
+            Login LoginFrame = new Login();
+            LoginFrame.setVisible(true);
+            LoginFrame.pack();
+            LoginFrame.setLocationRelativeTo(null); 
+            this.dispose();
+    }//GEN-LAST:event_LogOutBtnActionPerformed
 
-   
-    
-    
     /**
      * @param args the command line arguments
      */
@@ -211,10 +175,8 @@ public class Home_client extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton EditMyDataBtn;
-    private javax.swing.JButton QuitBtn;
-    private javax.swing.JButton RentBtn;
-    private javax.swing.JButton ReturnBtn;
+    private javax.swing.JButton LogOutBtn;
+    private javax.swing.JButton RentAndReserveBtn;
     private javax.swing.JButton ShowMyRentsBtn;
     private javax.swing.JButton ShowMyReservesBtn;
     private javax.swing.JButton ViewBtn;

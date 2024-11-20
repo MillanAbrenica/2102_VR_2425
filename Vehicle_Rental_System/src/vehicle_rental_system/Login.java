@@ -196,7 +196,6 @@ public class Login extends javax.swing.JFrame {
                  Email = email.getText();
                  Password = password.getText();
 
-                 // Query to check both admin and client tables
                  query = "SELECT * FROM admin WHERE email= '" + Email + "' UNION SELECT * FROM client WHERE email= '" + Email + "'";
                  ResultSet rs = st.executeQuery(query);
 
@@ -209,17 +208,17 @@ public class Login extends javax.swing.JFrame {
 
                  if (notFound == 1 && Password.equals(passDb)) {
                      if ("Admin".equalsIgnoreCase(roleDb)) {
-                         Home_admin HomeFrame = new Home_admin(); // Admin home page
+                         Home_admin HomeFrame = new Home_admin(); 
                          HomeFrame.setVisible(true);
                          HomeFrame.pack();
                          HomeFrame.setLocationRelativeTo(null);
                      } else if ("Client".equalsIgnoreCase(roleDb)) {
-                         Home_client HomeFrame = new Home_client(); // Client home page
+                         Home_client HomeFrame = new Home_client(); 
                          HomeFrame.setVisible(true);
                          HomeFrame.pack();
                          HomeFrame.setLocationRelativeTo(null);
                      }
-                     this.dispose(); // Close the login frame
+                     this.dispose(); 
                  } else {
                      JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
                              JOptionPane.ERROR_MESSAGE);
@@ -236,7 +235,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordActionPerformed
 
     private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
-        // TODO add your handling code here:
+    
     }//GEN-LAST:event_emailActionPerformed
 
     /**

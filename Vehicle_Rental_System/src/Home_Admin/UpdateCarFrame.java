@@ -199,7 +199,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // First, check if the car is available
             String checkQuery = "SELECT IsAvailable FROM Cars WHERE CarID = ?";
             PreparedStatement checkStmt = con.prepareStatement(checkQuery);
             checkStmt.setString(1, selectedCarID);
@@ -223,7 +222,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
                 return;
             }
 
-            // Update query for updating car details
             String query = "UPDATE Cars SET Brand = ?, Model = ?, Year = ?, Price = ? WHERE CarID = ?";
             PreparedStatement pst = con.prepareStatement(query);
 
@@ -238,7 +236,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             if (rowsUpdated > 0) {
                 JOptionPane.showMessageDialog(new JFrame(), "Car updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                // Clear text fields and reset combo box selection
                 Brandtxtf.setText("");
                 Modeltxtf.setText("");
                 Yeartxtf.setText("");
@@ -272,7 +269,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-                // Fetch car details for the selected CarID
                 String query = "SELECT Brand, Model, Year, Price FROM Cars WHERE CarID = ?";
                 PreparedStatement pst = con.prepareStatement(query);
                 pst.setString(1, selectedCarID);
@@ -284,7 +280,6 @@ public class UpdateCarFrame extends javax.swing.JFrame {
                     Yeartxtf.setText(rs.getString("Year"));
                     Pricetxtf.setText(rs.getString("Price"));
                 } else {
-                    // Clear fields if no car is found (optional)
                     Brandtxtf.setText("");
                     Modeltxtf.setText("");
                     Yeartxtf.setText("");
@@ -303,9 +298,7 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_carIDcomboboxActionPerformed
-
-    
-    
+   
     private void formWindowOpened() {                                      
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
         String dbUser = "root";
@@ -315,12 +308,10 @@ public class UpdateCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Fetch car IDs from the database
             String query = "SELECT CarID FROM Cars";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
 
-            // Populate the JComboBox
             while (rs.next()) {
                 carIDcombobox.addItem(rs.getString("CarID"));
             }

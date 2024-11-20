@@ -88,8 +88,8 @@
                   <Table columnCount="6" rowCount="5">
                     <Column editable="true" title="Car ID" type="java.lang.Object"/>
                     <Column editable="true" title="Brand" type="java.lang.Object"/>
-                    <Column editable="true" title="Year" type="java.lang.Object"/>
                     <Column editable="true" title="Model" type="java.lang.Object"/>
+                    <Column editable="true" title="Year" type="java.lang.Object"/>
                     <Column editable="true" title="Price" type="java.lang.Object"/>
                     <Column editable="true" title="Availability" type="java.lang.Object"/>
                   </Table>

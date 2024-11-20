@@ -182,13 +182,11 @@ public class AddCarFrame extends javax.swing.JFrame {
         String price = Pricetxtf.getText().trim();
         boolean isAvailable = isAvailableCB.isSelected();
 
-        // Validate input fields
         if (brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
             JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Check if isAvailable checkbox is checked
         if (!isAvailable) {
             JOptionPane.showMessageDialog(new JFrame(), "Availability must be selected.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -207,7 +205,6 @@ public class AddCarFrame extends javax.swing.JFrame {
                 return;
             }
 
-            // Database operation
             try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
                 String query = "INSERT INTO Cars (Brand, Model, Year, Price, isAvailable) VALUES (?, ?, ?, ?, ?)";
                 try (PreparedStatement pst = con.prepareStatement(query)) {

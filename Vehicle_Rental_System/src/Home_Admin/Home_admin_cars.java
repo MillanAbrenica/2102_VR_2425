@@ -173,7 +173,6 @@ public class Home_admin_cars extends javax.swing.JFrame {
     public void loadCarsIntoTable() {
         DefaultTableModel model = (DefaultTableModel) viewCarsTable.getModel();
 
-        // Clear existing rows in the table
         model.setRowCount(0);
 
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
@@ -181,15 +180,12 @@ public class Home_admin_cars extends javax.swing.JFrame {
         String dbPassword = "";
 
         try {
-            // Establish database connection
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Query to select all required columns including isAvailable
             String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable FROM Cars";
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
 
-            // Iterate through result set and populate table rows
             while (rs.next()) {
                 int carID = rs.getInt("CarID");
                 String brand = rs.getString("Brand");
@@ -198,12 +194,10 @@ public class Home_admin_cars extends javax.swing.JFrame {
                 double price = rs.getDouble("Price");
                 boolean isAvailable = rs.getBoolean("isAvailable");
 
-                // Add row to table, displaying "Available" or "Not Available"
                 String availabilityText = isAvailable ? "Available" : "Not Available";
                 model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
             }
 
-            // Close resources
             rs.close();
             stmt.close();
             con.close();

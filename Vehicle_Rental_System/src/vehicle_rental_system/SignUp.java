@@ -166,7 +166,7 @@ public class SignUp extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginShowBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginShowBtnActionPerformed
-        // TODO add your handling code here:
+
         Login LoginFrame = new Login();
         LoginFrame.setVisible(true);
         LoginFrame.pack();
@@ -179,12 +179,10 @@ public class SignUp extends javax.swing.JFrame {
         String dbUser = "root";
         String dbPassword = "";
 
-        // Retrieve input values
         String fullName = fname.getText();
         String email = emailAddress.getText();
         String password = pass.getText();
 
-        // Check for empty fields
         if (fullName.isEmpty() || email.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -194,7 +192,6 @@ public class SignUp extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Insert query with RETURN_GENERATED_KEYS to get the generated client ID
             String query = "INSERT INTO client (full_name, email, password, role) VALUES (?, ?, ?, ?)";
             PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
@@ -206,17 +203,15 @@ public class SignUp extends javax.swing.JFrame {
             int rowsInserted = pst.executeUpdate();
 
             if (rowsInserted > 0) {
-                // Retrieve the generated client ID
                 ResultSet generatedKeys = pst.getGeneratedKeys();
                 if (generatedKeys.next()) {
-                    int clientID = generatedKeys.getInt(1); // Get the first generated key (ID)
+                    int clientID = generatedKeys.getInt(1); 
                     JOptionPane.showMessageDialog(new JFrame(), 
                         "New account has been created successfully!\nYour Client ID is: " + clientID, 
                         "Success", 
                         JOptionPane.INFORMATION_MESSAGE);
                 }
 
-                // Clear input fields
                 fname.setText("");
                 emailAddress.setText("");
                 pass.setText("");
@@ -224,7 +219,6 @@ public class SignUp extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(new JFrame(), "Failed to create a new account. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-            // Close resources
             pst.close();
             con.close();
 

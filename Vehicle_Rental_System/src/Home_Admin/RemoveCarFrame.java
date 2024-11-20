@@ -104,10 +104,8 @@ public class RemoveCarFrame extends javax.swing.JFrame {
         String dbUser = "root";
         String dbPassword = "";
 
-        // Get the selected Car ID from the combo box
         String selectedCarID = (String) CarIDCB.getSelectedItem();
 
-        // Check if no Car ID is selected
         if (selectedCarID == null || selectedCarID.isEmpty()) {
             JOptionPane.showMessageDialog(new JFrame(), "Please select a Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -117,22 +115,19 @@ public class RemoveCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Delete query to remove the car entry based on CarID
             String query = "DELETE FROM Cars WHERE CarID = ?";
             PreparedStatement pst = con.prepareStatement(query);
 
-            pst.setString(1, selectedCarID);  // Set the CarID for deletion (from combo box)
+            pst.setString(1, selectedCarID); 
 
             int rowsDeleted = pst.executeUpdate();
 
             if (rowsDeleted > 0) {
                 JOptionPane.showMessageDialog(new JFrame(), "Car deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-                // Optionally, clear the selection in the combo box
-                CarIDCB.setSelectedIndex(-1);  // Deselect the combo box
+                CarIDCB.setSelectedIndex(-1);  
 
-                // Refresh the combo box to remove the deleted Car ID
-                populateCarIDs();  // Refresh the combo box with updated car IDs
+                populateCarIDs();  
 
             } else {
                 JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -149,15 +144,13 @@ public class RemoveCarFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_DeleteBtnActionPerformed
 
     private void CarIDCBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarIDCBActionPerformed
-        // Get the selected CarID from the ComboBox
+
         String selectedCarID = (String) CarIDCB.getSelectedItem();
 
-        // Check if the combo box selection is valid
         if (selectedCarID == null || selectedCarID.isEmpty()) {
-            // Optionally, you can show a message to inform the user to select a Car ID
-            // but do NOT delete anything here.
+         
             JOptionPane.showMessageDialog(new JFrame(), "Please select a Car ID to delete.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;  // Exit the method to prevent further execution
+            return;  
         }
 
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
@@ -165,16 +158,13 @@ public class RemoveCarFrame extends javax.swing.JFrame {
         String dbPassword = "";
 
         try {
-            // Load the JDBC driver and establish connection
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Query to delete the car based on the selected CarID
             String query = "DELETE FROM Cars WHERE CarID = ?";
             PreparedStatement pst = con.prepareStatement(query);
-            pst.setString(1, selectedCarID); // Use selected CarID for deleting
+            pst.setString(1, selectedCarID); 
 
-            // Close resources
             pst.close();
             con.close();
 
@@ -195,13 +185,11 @@ public class RemoveCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            // Fetch car IDs from the database
             String query = "SELECT CarID FROM Cars";
             PreparedStatement pst = con.prepareStatement(query);
             ResultSet rs = pst.executeQuery();
 
-            // Populate the JComboBox
-            CarIDCB.removeAllItems();  // Clear any existing items before populating
+            CarIDCB.removeAllItems(); 
             while (rs.next()) {
                 CarIDCB.addItem(rs.getString("CarID"));
             }
