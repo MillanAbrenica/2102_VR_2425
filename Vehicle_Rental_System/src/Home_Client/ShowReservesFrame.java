@@ -4,16 +4,15 @@ import javax.swing.*;
 import java.sql.*;
 import javax.swing.table.DefaultTableModel;
 
-public class ShowRentsFrame extends javax.swing.JFrame {
+public class ShowReservesFrame extends javax.swing.JFrame {
     
     private int clientId;
     
-    public ShowRentsFrame() {
+    public ShowReservesFrame() {
         this.clientId = clientId;
         initComponents();
         loadRentedCars();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        refreshRentalsTable();
     }
 
     @SuppressWarnings("unchecked")
@@ -59,19 +58,19 @@ public class ShowRentsFrame extends javax.swing.JFrame {
 
         showRentsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Rental ID", "Car ID", "Rented Date", "Brand", "Model", "Client"
+                "Rental ID", "Car ID", "Rented Date", "Brand", "Model"
             }
         ));
         jScrollPane2.setViewportView(showRentsTable);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 90, 800, 450));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 87, 800, 450));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards.png"))); // NOI18N
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
@@ -104,24 +103,8 @@ public class ShowRentsFrame extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) showRentsTable.getModel();
 
-        // Check if the model has been properly initialized with 6 columns
-        if (model.getColumnCount() != 6) {
-            JOptionPane.showMessageDialog(this, "Table columns not properly initialized!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Modified query to handle cases where no client is associated with the rental
-        String query = """
-            SELECT 
-                Rentals.RentalID, 
-                Rentals.CarID, 
-                Rentals.RentedDate, 
-                Rentals.Brand, 
-                Rentals.Model, 
-                COALESCE(client.full_name, 'No Client') AS Client
-            FROM Rentals
-            LEFT JOIN client ON Rentals.ClientID = client.id
-        """;
+        // Query to fetch all columns from the rentals table
+        String query = "SELECT RentalID, CarID, RentedDate, Brand, Model FROM Rentals";
 
         try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
              PreparedStatement pst = con.prepareStatement(query);
@@ -137,59 +120,20 @@ public class ShowRentsFrame extends javax.swing.JFrame {
                 String rentedDate = rs.getString("RentedDate");
                 String brand = rs.getString("Brand");
                 String modelStr = rs.getString("Model");
-                String clientName = rs.getString("Client");
 
                 // Add a new row with the fetched data
-                model.addRow(new Object[]{rentalID, carID, rentedDate, brand, modelStr, clientName});
+                model.addRow(new Object[]{rentalID, carID, rentedDate, brand, modelStr});
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    private void refreshRentalsTable() {
-        // Fetch updated data from the Rentals table and update the JTable
-        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
-        String dbUser = "root";
-        String dbPassword = "";
-        try {
-            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-            String query = "SELECT * FROM Rentals"; // Or query only the active rentals
-            PreparedStatement pst = con.prepareStatement(query);
-            ResultSet rs = pst.executeQuery();
-
-            // Assuming you have a JTable named rentalsTable
-            DefaultTableModel tableModel = (DefaultTableModel) showRentsTable.getModel();
-            tableModel.setRowCount(0); // Clear existing rows
-
-            // Populate the table with updated rental data
-            while (rs.next()) {
-                Object[] row = {
-                    rs.getInt("RentalID"),
-                    rs.getString("CarID"),
-                    rs.getTimestamp("RentedDate"),
-                    rs.getString("Brand"),
-                    rs.getString("Model"),
-                    rs.getString("full_name"),
-                    rs.getInt("ClientID")
-                };
-                tableModel.addRow(row);
-            }
-
-            rs.close();
-            pst.close();
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(new JFrame(), "Error refreshing rentals table: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ShowRentsFrame().setVisible(true);
+                new ShowReservesFrame().setVisible(true);
             }
         });
     }

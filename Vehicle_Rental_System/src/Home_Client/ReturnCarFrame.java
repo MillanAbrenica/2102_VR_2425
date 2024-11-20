@@ -1,11 +1,15 @@
 package Home_Client;
 
+import Home_Admin.*;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
+import java.sql.ResultSet;
+import javax.swing.JComboBox;
+
 
 public class ReturnCarFrame extends javax.swing.JFrame {
 
@@ -13,51 +17,34 @@ public class ReturnCarFrame extends javax.swing.JFrame {
     public ReturnCarFrame() {
         initComponents();
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        formWindowOpened();
     }
 
     @SuppressWarnings("unchecked")
-    
-    
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel6 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         BackToMenuBtn = new javax.swing.JButton();
-        ReturnBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        Brandtxtf = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        Modeltxtf = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        Yeartxtf = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        Pricetxtf = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        ReturnBtn = new javax.swing.JButton();
+        carIDcombobox = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setText("ADD CARS");
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
-        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText("ADD CARS");
-
-        jButton1.setText("jButton1");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("RETURN");
+        setTitle("UPDATE CARS");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(450, 350));
+        jPanel1.setPreferredSize(new java.awt.Dimension(600, 400));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         BackToMenuBtn.setBackground(new java.awt.Color(0, 0, 0));
@@ -70,6 +57,68 @@ public class ReturnCarFrame extends javax.swing.JFrame {
         });
         jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
 
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Car ID");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 88, 37, -1));
+
+        Brandtxtf.setBackground(new java.awt.Color(0, 0, 0));
+        Brandtxtf.setForeground(new java.awt.Color(255, 255, 255));
+        Brandtxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BrandtxtfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Brandtxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 125, 186, -1));
+
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Brand");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 128, 37, -1));
+
+        Modeltxtf.setBackground(new java.awt.Color(0, 0, 0));
+        Modeltxtf.setForeground(new java.awt.Color(255, 255, 255));
+        Modeltxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ModeltxtfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Modeltxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 165, 186, -1));
+
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Model");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 168, 37, -1));
+
+        Yeartxtf.setBackground(new java.awt.Color(0, 0, 0));
+        Yeartxtf.setForeground(new java.awt.Color(255, 255, 255));
+        Yeartxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                YeartxtfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Yeartxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 205, 186, -1));
+
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Year");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 208, 37, -1));
+
+        Pricetxtf.setBackground(new java.awt.Color(0, 0, 0));
+        Pricetxtf.setForeground(new java.awt.Color(255, 255, 255));
+        Pricetxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PricetxtfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Pricetxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 245, 186, -1));
+
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Price");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 248, 37, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("RETURN CARS");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(173, 35, 95, -1));
+
         ReturnBtn.setBackground(new java.awt.Color(0, 0, 0));
         ReturnBtn.setForeground(new java.awt.Color(255, 255, 255));
         ReturnBtn.setText("Return");
@@ -78,83 +127,14 @@ public class ReturnCarFrame extends javax.swing.JFrame {
                 ReturnBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ReturnBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 320, -1, -1));
+        jPanel1.add(ReturnBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 300, -1, -1));
 
-        jLabel1.setBackground(new java.awt.Color(255, 255, 255));
-        jLabel1.setFont(jLabel1.getFont().deriveFont((jLabel1.getFont().getStyle() | java.awt.Font.ITALIC) | java.awt.Font.BOLD));
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("RETURN CAR");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 40, -1, -1));
-
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Brand");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 128, -1, 20));
-
-        jTextField2.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField2.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        carIDcombobox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                carIDcomboboxActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 125, 185, -1));
-
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Year");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 208, -1, 20));
-
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Car ID ");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 86, -1, 20));
-
-        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel5.setText("Car ID ");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 86, -1, 20));
-
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Price");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 248, -1, 20));
-
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Model");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(86, 168, -1, 20));
-
-        jTextField3.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField3.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField3ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 205, 185, -1));
-
-        jTextField4.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField4.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(141, 85, 185, -1));
-
-        jTextField5.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField5.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 245, 185, -1));
-
-        jTextField6.setBackground(new java.awt.Color(0, 0, 0));
-        jTextField6.setForeground(new java.awt.Color(255, 255, 255));
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 165, 185, -1));
+        jPanel1.add(carIDcombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 190, -1));
 
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards_add.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 350));
@@ -163,11 +143,11 @@ public class ReturnCarFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)
         );
 
         pack();
@@ -175,88 +155,217 @@ public class ReturnCarFrame extends javax.swing.JFrame {
 
     private void BackToMenuBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackToMenuBtnActionPerformed
         this.dispose();
-        Home_client mainMenu = new Home_client();
+        Home_admin mainMenu = new Home_admin();
         mainMenu.setVisible(true);
     }//GEN-LAST:event_BackToMenuBtnActionPerformed
 
+    private void BrandtxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BrandtxtfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BrandtxtfActionPerformed
+
+    private void ModeltxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ModeltxtfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ModeltxtfActionPerformed
+
+    private void YeartxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_YeartxtfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_YeartxtfActionPerformed
+
+    private void PricetxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PricetxtfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PricetxtfActionPerformed
+
     private void ReturnBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReturnBtnActionPerformed
-        String carID = jTextField4.getText();
-        String brand = jTextField2.getText();
-        String model = jTextField6.getText();
-        String year = jTextField3.getText();
-        String price = jTextField5.getText();
-        
-        if (carID.isEmpty() || brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
-            // Display an error message if any field is empty
-            JOptionPane.showMessageDialog(this, "Please fill out all fields.", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            try {
-                // Assuming you have a method to connect to the database, e.g., getConnection()
-                Connection conn = getConnection(); // replace with your actual database connection method
-                String query = "UPDATE cars SET brand = ?, model = ?, year = ?, price = ? WHERE car_id = ?";
-                
-                PreparedStatement pst = conn.prepareStatement(query);
-                pst.setString(1, brand);
-                pst.setString(2, model);
-                pst.setString(3, year);
-                pst.setString(4, price);
-                pst.setString(5, carID);
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+    String dbUser = "root";
+    String dbPassword = "";
 
-                int rowsAffected = pst.executeUpdate();
+    String brand = Brandtxtf.getText();
+    String model = Modeltxtf.getText();
+    String year = Yeartxtf.getText();
+    String price = Pricetxtf.getText();
+    String selectedCarID = (String) carIDcombobox.getSelectedItem();
 
-                if (rowsAffected > 0) {
-                    // If the update was successful, show success message
-                    JOptionPane.showMessageDialog(this, "Car information returned successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    
-                    // Optionally, clear the fields after submission
-                    jTextField4.setText("");
-                    jTextField2.setText("");
-                    jTextField6.setText("");
-                    jTextField3.setText("");
-                    jTextField5.setText("");
-                } else {
-                    // If no rows were affected, it means the car ID wasn't found
-                    JOptionPane.showMessageDialog(this, "Car ID not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+    if (selectedCarID == null) {
+        JOptionPane.showMessageDialog(new JFrame(), "Please select a Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
 
-                // Close connection
-                conn.close();
-            } catch (Exception e) {
-                // Handle any database connection or query errors
-                JOptionPane.showMessageDialog(this, "Error connecting to the database: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-            }
+    if (brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
+        JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+        // First, check if the car is available
+        String checkQuery = "SELECT IsAvailable FROM Cars WHERE CarID = ?";
+        PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+        checkStmt.setString(1, selectedCarID);
+
+        ResultSet rs = checkStmt.executeQuery();
+        if (!rs.next()) {
+            JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+            rs.close();
+            checkStmt.close();
+            con.close();
+            return;
         }
-        
+
+        boolean isAvailable = rs.getBoolean("IsAvailable");
+        rs.close();
+        checkStmt.close();
+
+        if (isAvailable) {
+            JOptionPane.showMessageDialog(new JFrame(), "The car is already available.", "Error", JOptionPane.ERROR_MESSAGE);
+            con.close();
+            return;
+        }
+
+        // Now set the car's availability to true (available)
+        String updateAvailabilityQuery = "UPDATE Cars SET IsAvailable = ? WHERE CarID = ?";
+        PreparedStatement updateAvailabilityStmt = con.prepareStatement(updateAvailabilityQuery);
+        updateAvailabilityStmt.setBoolean(1, true); // Set car to available
+        updateAvailabilityStmt.setString(2, selectedCarID);
+
+        int availabilityUpdated = updateAvailabilityStmt.executeUpdate();
+        if (availabilityUpdated > 0) {
+            JOptionPane.showMessageDialog(new JFrame(), "Car returned successfully. Availability set to 'Available'.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(), "Error updating car availability.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        updateAvailabilityStmt.close();
+
+        // Delete the rental record from the Rentals table
+        String deleteRentalQuery = "DELETE FROM Rentals WHERE CarID = ?";
+        PreparedStatement deleteRentalStmt = con.prepareStatement(deleteRentalQuery);
+        deleteRentalStmt.setString(1, selectedCarID);
+
+        int rentalDeleted = deleteRentalStmt.executeUpdate();
+        if (rentalDeleted > 0) {
+            JOptionPane.showMessageDialog(new JFrame(), "Rental record deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(), "Error deleting rental record.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        deleteRentalStmt.close();
+
+        // Update query for updating car details (optional, if you want to update other car details)
+        String query = "UPDATE Cars SET Brand = ?, Model = ?, Year = ?, Price = ? WHERE CarID = ?";
+        PreparedStatement pst = con.prepareStatement(query);
+
+        pst.setString(1, brand);
+        pst.setString(2, model);
+        pst.setInt(3, Integer.parseInt(year));
+        pst.setDouble(4, Double.parseDouble(price));
+        pst.setString(5, selectedCarID);
+
+        int rowsUpdated = pst.executeUpdate();
+
+        if (rowsUpdated > 0) {
+            JOptionPane.showMessageDialog(new JFrame(), "Car updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+            // Clear text fields and reset combo box selection
+            Brandtxtf.setText("");
+            Modeltxtf.setText("");
+            Yeartxtf.setText("");
+            Pricetxtf.setText("");
+            carIDcombobox.setSelectedIndex(-1);
+        } else {
+            JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        pst.close();
+        con.close();
+
+        ShowRentsFrame ShowRentsFrame = new ShowRentsFrame();
+            
+
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+    } catch (ClassNotFoundException e) {
+        JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(new JFrame(), "Error: Please enter valid numbers for Year and Price.", "Input Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_ReturnBtnActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    private void carIDcomboboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carIDcomboboxActionPerformed
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+        String selectedCarID = (String) carIDcombobox.getSelectedItem();
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+        if (selectedCarID != null) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+                // Fetch car details for the selected CarID
+                String query = "SELECT Brand, Model, Year, Price FROM Cars WHERE CarID = ?";
+                PreparedStatement pst = con.prepareStatement(query);
+                pst.setString(1, selectedCarID);
+                ResultSet rs = pst.executeQuery();
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+                if (rs.next()) {
+                    Brandtxtf.setText(rs.getString("Brand"));
+                    Modeltxtf.setText(rs.getString("Model"));
+                    Yeartxtf.setText(rs.getString("Year"));
+                    Pricetxtf.setText(rs.getString("Price"));
+                } else {
+                    // Clear fields if no car is found (optional)
+                    Brandtxtf.setText("");
+                    Modeltxtf.setText("");
+                    Yeartxtf.setText("");
+                    Pricetxtf.setText("");
+                    JOptionPane.showMessageDialog(new JFrame(), "No car found for the selected Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+
+                rs.close();
+                pst.close();
+                con.close();
+
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            } catch (ClassNotFoundException e) {
+                JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_carIDcomboboxActionPerformed
+
     
-    private Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/car_rental"; // MySQL example
-        String user = "root";
-        String password = "password"; // Your database password
-
-        return DriverManager.getConnection(url, user, password);
-    }
     
+    private void formWindowOpened() {                                      
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+
+            // Fetch car IDs from the database
+            String query = "SELECT CarID FROM Cars";
+            PreparedStatement pst = con.prepareStatement(query);
+            ResultSet rs = pst.executeQuery();
+
+            // Populate the JComboBox
+            while (rs.next()) {
+                carIDcombobox.addItem(rs.getString("CarID"));
+            }
+
+            rs.close();
+            pst.close();
+            con.close();
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        } catch (ClassNotFoundException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: MySQL JDBC Driver not found.", "Driver Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }                      
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -268,23 +377,19 @@ public class ReturnCarFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenuBtn;
+    private javax.swing.JTextField Brandtxtf;
+    private javax.swing.JTextField Modeltxtf;
+    private javax.swing.JTextField Pricetxtf;
     private javax.swing.JButton ReturnBtn;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField Yeartxtf;
+    private javax.swing.JComboBox<String> carIDcombobox;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
     // End of variables declaration//GEN-END:variables
 }

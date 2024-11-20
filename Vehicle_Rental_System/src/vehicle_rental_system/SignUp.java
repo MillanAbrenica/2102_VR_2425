@@ -194,8 +194,9 @@ public class SignUp extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
+            // Insert query with RETURN_GENERATED_KEYS to get the generated client ID
             String query = "INSERT INTO client (full_name, email, password, role) VALUES (?, ?, ?, ?)";
-            PreparedStatement pst = con.prepareStatement(query);
+            PreparedStatement pst = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
             pst.setString(1, fullName);  
             pst.setString(2, email);     
@@ -205,12 +206,22 @@ public class SignUp extends javax.swing.JFrame {
             int rowsInserted = pst.executeUpdate();
 
             if (rowsInserted > 0) {
-                JOptionPane.showMessageDialog(new JFrame(), "New account has been created successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                // Retrieve the generated client ID
+                ResultSet generatedKeys = pst.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int clientID = generatedKeys.getInt(1); // Get the first generated key (ID)
+                    JOptionPane.showMessageDialog(new JFrame(), 
+                        "New account has been created successfully!\nYour Client ID is: " + clientID, 
+                        "Success", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                }
 
                 // Clear input fields
                 fname.setText("");
                 emailAddress.setText("");
                 pass.setText("");
+            } else {
+                JOptionPane.showMessageDialog(new JFrame(), "Failed to create a new account. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
             // Close resources

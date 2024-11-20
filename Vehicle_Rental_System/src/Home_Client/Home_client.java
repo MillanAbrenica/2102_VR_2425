@@ -18,7 +18,7 @@ public class Home_client extends javax.swing.JFrame {
         ViewBtn = new javax.swing.JButton();
         RentBtn = new javax.swing.JButton();
         ReturnBtn = new javax.swing.JButton();
-        ReserveBtn = new javax.swing.JButton();
+        ShowMyReservesBtn = new javax.swing.JButton();
         ShowMyRentsBtn = new javax.swing.JButton();
         EditMyDataBtn = new javax.swing.JButton();
         QuitBtn = new javax.swing.JButton();
@@ -39,7 +39,7 @@ public class Home_client extends javax.swing.JFrame {
                 ViewBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ViewBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, 110, 40));
+        jPanel1.add(ViewBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, 130, 40));
 
         RentBtn.setBackground(new java.awt.Color(255, 255, 255));
         RentBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -59,17 +59,17 @@ public class Home_client extends javax.swing.JFrame {
                 ReturnBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ReturnBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 110, 40));
+        jPanel1.add(ReturnBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 160, 130, 40));
 
-        ReserveBtn.setBackground(new java.awt.Color(255, 255, 255));
-        ReserveBtn.setForeground(new java.awt.Color(0, 0, 0));
-        ReserveBtn.setText("Reserve Car");
-        ReserveBtn.addActionListener(new java.awt.event.ActionListener() {
+        ShowMyReservesBtn.setBackground(new java.awt.Color(255, 255, 255));
+        ShowMyReservesBtn.setForeground(new java.awt.Color(0, 0, 0));
+        ShowMyReservesBtn.setText("Show My Reserve");
+        ShowMyReservesBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReserveBtnActionPerformed(evt);
+                ShowMyReservesBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, 110, 40));
+        jPanel1.add(ShowMyReservesBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 130, 40));
 
         ShowMyRentsBtn.setBackground(new java.awt.Color(0, 0, 0));
         ShowMyRentsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -89,7 +89,7 @@ public class Home_client extends javax.swing.JFrame {
                 EditMyDataBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(EditMyDataBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 110, 40));
+        jPanel1.add(EditMyDataBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 240, 130, 40));
 
         QuitBtn.setBackground(new java.awt.Color(0, 0, 0));
         QuitBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -119,7 +119,7 @@ public class Home_client extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RentBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RentBtnActionPerformed
-             RentCarFrame RentCarFrame = new RentCarFrame();
+             RentNReserveCarFrame RentCarFrame = new RentNReserveCarFrame();
              RentCarFrame.setVisible(true);
              RentCarFrame.pack();
              RentCarFrame.setLocationRelativeTo(null); 
@@ -156,13 +156,13 @@ public class Home_client extends javax.swing.JFrame {
              this.dispose();
     }//GEN-LAST:event_EditMyDataBtnActionPerformed
 
-    private void ReserveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveBtnActionPerformed
-             ReserveCarFrame ReserveCarFrame = new ReserveCarFrame();
-             ReserveCarFrame.setVisible(true);
-             ReserveCarFrame.pack();
-             ReserveCarFrame.setLocationRelativeTo(null); 
+    private void ShowMyReservesBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowMyReservesBtnActionPerformed
+             ShowReservesFrame ShowReservesFrame = new ShowReservesFrame();
+             ShowReservesFrame.setVisible(true);
+             ShowReservesFrame.pack();
+             ShowReservesFrame.setLocationRelativeTo(null); 
              this.dispose();
-    }//GEN-LAST:event_ReserveBtnActionPerformed
+    }//GEN-LAST:event_ShowMyReservesBtnActionPerformed
 
     private void QuitBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_QuitBtnActionPerformed
         System.exit(0);
@@ -214,9 +214,9 @@ public class Home_client extends javax.swing.JFrame {
     private javax.swing.JButton EditMyDataBtn;
     private javax.swing.JButton QuitBtn;
     private javax.swing.JButton RentBtn;
-    private javax.swing.JButton ReserveBtn;
     private javax.swing.JButton ReturnBtn;
     private javax.swing.JButton ShowMyRentsBtn;
+    private javax.swing.JButton ShowMyReservesBtn;
     private javax.swing.JButton ViewBtn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
