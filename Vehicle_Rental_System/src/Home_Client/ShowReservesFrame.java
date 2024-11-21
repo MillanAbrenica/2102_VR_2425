@@ -2,7 +2,26 @@ package Home_Client;
 
 import javax.swing.*;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableModel;
+import java.sql.PreparedStatement;
+import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import javax.swing.JOptionPane;
+
 
 public class ShowReservesFrame extends javax.swing.JFrame {
     
@@ -54,14 +73,18 @@ public class ShowReservesFrame extends javax.swing.JFrame {
         jLabel2.setText("RESERVATIONS");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 40, -1, -1));
 
+        CancelReserveBtn.setBackground(new java.awt.Color(0, 0, 0));
+        CancelReserveBtn.setForeground(new java.awt.Color(255, 255, 255));
         CancelReserveBtn.setText("Cancel Reservation");
         CancelReserveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CancelReserveBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(CancelReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 560, -1, -1));
+        jPanel1.add(CancelReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 500, 140, 30));
 
+        showReserveTable.setBackground(new java.awt.Color(0, 0, 0));
+        showReserveTable.setForeground(new java.awt.Color(255, 255, 255));
         showReserveTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -76,10 +99,10 @@ public class ShowReservesFrame extends javax.swing.JFrame {
         ));
         jScrollPane2.setViewportView(showReserveTable);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 87, 800, 450));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 87, 850, 390));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 580));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,7 +112,9 @@ public class ShowReservesFrame extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 567, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 6, Short.MAX_VALUE))
         );
 
         pack();
@@ -111,7 +136,7 @@ public class ShowReservesFrame extends javax.swing.JFrame {
         int carID = (int) model.getValueAt(selectedRow, 1); 
 
         String deleteReserveQuery = "DELETE FROM Reserves WHERE ReserveID = ?";
-        String updateCarQuery = "UPDATE cars SET isAvailable = 1 WHERE CarID = ?";
+        String updateCarQuery = "UPDATE cars SET isAvailable = 1, isReserved = 0 WHERE CarID = ?";
 
         try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
             con.setAutoCommit(false);
@@ -140,8 +165,7 @@ public class ShowReservesFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_CancelReserveBtnActionPerformed
-
-    
+ 
     private void loadReserveCars() {
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
         String dbUser = "root";
@@ -158,7 +182,7 @@ public class ShowReservesFrame extends javax.swing.JFrame {
             SELECT 
                 Reserves.ReserveID, 
                 Reserves.CarID, 
-                Reserves.RentedDate, 
+                Reserves.ReserveDate, 
                 Reserves.Brand, 
                 Reserves.Model, 
                 client.full_name AS Client
@@ -175,13 +199,13 @@ public class ShowReservesFrame extends javax.swing.JFrame {
             while (rs.next()) {
                 int reserveID = rs.getInt("ReserveID");
                 int carID = rs.getInt("CarID");
-                String rentedDate = rs.getString("RentedDate");
+                String rentedDate = rs.getString("ReserveDate");
                 String brand = rs.getString("Brand");
                 String modelStr = rs.getString("Model");
                 String clientName = rs.getString("Client");
 
                 if (clientName == null) {
-                    clientName = "No Client";  // Handle null value for Client
+                    clientName = "No Client";  
                 }
 
                 model.addRow(new Object[]{reserveID, carID, rentedDate, brand, modelStr, clientName});
@@ -190,8 +214,125 @@ public class ShowReservesFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    private void rentCarInDatabase(int carID, String brand, String model, double payment, int clientID) {
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
 
+        try {
+            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
+            String checkQuery = "SELECT isAvailable FROM Cars WHERE CarID = ?";
+            PreparedStatement checkStmt = con.prepareStatement(checkQuery);
+            checkStmt.setInt(1, carID);
+            ResultSet rs = checkStmt.executeQuery();
+
+            if (rs.next()) {
+                boolean isAvailable = rs.getBoolean("isAvailable");
+                if (!isAvailable) {
+                    JOptionPane.showMessageDialog(null, "Car is already rented.", "Unavailable", JOptionPane.WARNING_MESSAGE);
+                    rs.close();
+                    checkStmt.close();
+                    con.close();
+                    return;
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Car not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                rs.close();
+                checkStmt.close();
+                con.close();
+                return;
+            }
+            rs.close();
+            checkStmt.close();
+
+            String clientQuery = "SELECT full_name FROM client WHERE id = ?";
+            PreparedStatement clientStmt = con.prepareStatement(clientQuery);
+            clientStmt.setInt(1, clientID);
+            ResultSet clientRs = clientStmt.executeQuery();
+
+            String fullName = null;
+            if (clientRs.next()) {
+                fullName = clientRs.getString("full_name");
+            } else {
+                JOptionPane.showMessageDialog(null, "Client not found.", "Error", JOptionPane.ERROR_MESSAGE);
+                clientRs.close();
+                clientStmt.close();
+                con.close();
+                return;
+            }
+            clientRs.close();
+            clientStmt.close();
+
+            String insertQuery = "INSERT INTO Rentals (CarID, Brand, Model, ClientID, full_name) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement insertStmt = con.prepareStatement(insertQuery);
+            insertStmt.setInt(1, carID);
+            insertStmt.setString(2, brand);
+            insertStmt.setString(3, model);
+            insertStmt.setInt(4, clientID);  
+            insertStmt.setString(5, fullName);  
+
+            int rowsInserted = insertStmt.executeUpdate();
+
+            if (rowsInserted > 0) {
+                String updateQuery = "UPDATE Cars SET isAvailable = ? WHERE CarID = ?";
+                PreparedStatement updateStmt = con.prepareStatement(updateQuery);
+                updateStmt.setBoolean(1, false);  
+                updateStmt.setInt(2, carID);
+                updateStmt.executeUpdate();
+                updateStmt.close();
+
+                JOptionPane.showMessageDialog(null, "Car rented successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                loadCarsIntoTable();  
+            } else {
+                JOptionPane.showMessageDialog(null, "Failed to rent the car. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            insertStmt.close();
+            con.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void loadCarsIntoTable() {
+        DefaultTableModel model = (DefaultTableModel) showReserveTable.getModel();
+        model.setRowCount(0);
+
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars";
+            try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    int carID = rs.getInt("CarID");
+                    String brand = rs.getString("Brand");
+                    String modelText = rs.getString("Model");
+                    int year = rs.getInt("Year");
+                    double price = rs.getDouble("Price");
+                    boolean isAvailable = rs.getBoolean("isAvailable");
+                    boolean isReserved = rs.getBoolean("isReserved");
+
+                    String availabilityText;
+                    if (isReserved) {
+                        availabilityText = "Reserved";
+                    } else if (!isAvailable) {
+                        availabilityText = "Not Available";
+                    } else {
+                        availabilityText = "Available";
+                    }
+
+                    model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+             
     
     public static void main(String args[]) {
         

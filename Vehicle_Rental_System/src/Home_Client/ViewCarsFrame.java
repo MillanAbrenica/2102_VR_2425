@@ -64,7 +64,7 @@ public class ViewCarsFrame extends javax.swing.JFrame {
                 {null, null, null, null, null, null}
             },
             new String [] {
-                "Car ID", "Brand", "Year", "Model", "Price", "Availability"
+                "Car ID", "Brand", "Model", "Year", "Price", "Availability"
             }
         ));
         jScrollPane1.setViewportView(viewCarsTable);
@@ -96,36 +96,36 @@ public class ViewCarsFrame extends javax.swing.JFrame {
     
     public void loadCarsIntoTable() {
         DefaultTableModel model = (DefaultTableModel) viewCarsTable.getModel();
-
         model.setRowCount(0);
 
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
         String dbUser = "root";
         String dbPassword = "";
 
-        try {
-            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars";
+            try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    int carID = rs.getInt("CarID");
+                    String brand = rs.getString("Brand");
+                    String modelText = rs.getString("Model");
+                    int year = rs.getInt("Year");
+                    double price = rs.getDouble("Price");
+                    boolean isAvailable = rs.getBoolean("isAvailable");
+                    boolean isReserved = rs.getBoolean("isReserved");
 
-            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable FROM Cars";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+                    String availabilityText;
+                    if (isReserved) {
+                        availabilityText = "Reserved";
+                    } else if (!isAvailable) {
+                        availabilityText = "Not Available";
+                    } else {
+                        availabilityText = "Available";
+                    }
 
-            while (rs.next()) {
-                int carID = rs.getInt("CarID");
-                String brand = rs.getString("Brand");
-                String modelText = rs.getString("Model");
-                int year = rs.getInt("Year");
-                double price = rs.getDouble("Price");
-                boolean isAvailable = rs.getBoolean("isAvailable");
-
-                String availabilityText = isAvailable ? "Available" : "Not Available";
-                model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                    model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                }
             }
-
-            rs.close();
-            stmt.close();
-            con.close();
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }

@@ -181,6 +181,7 @@ public class AddCarFrame extends javax.swing.JFrame {
         String year = Yeartxtf.getText().trim();
         String price = Pricetxtf.getText().trim();
         boolean isAvailable = isAvailableCB.isSelected();
+        boolean isReserved = false; 
 
         if (brand.isEmpty() || model.isEmpty() || year.isEmpty() || price.isEmpty()) {
             JOptionPane.showMessageDialog(new JFrame(), "All fields are required.", "Error", JOptionPane.ERROR_MESSAGE);
@@ -206,13 +207,14 @@ public class AddCarFrame extends javax.swing.JFrame {
             }
 
             try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
-                String query = "INSERT INTO Cars (Brand, Model, Year, Price, isAvailable) VALUES (?, ?, ?, ?, ?)";
+                String query = "INSERT INTO Cars (Brand, Model, Year, Price, isAvailable, isReserved) VALUES (?, ?, ?, ?, ?, ?)";
                 try (PreparedStatement pst = con.prepareStatement(query)) {
                     pst.setString(1, brand);
                     pst.setString(2, model);
                     pst.setInt(3, carYear);
                     pst.setDouble(4, carPrice);
                     pst.setBoolean(5, isAvailable);
+                    pst.setBoolean(6, isReserved); 
 
                     int rowsInserted = pst.executeUpdate();
                     if (rowsInserted > 0) {

@@ -104,7 +104,7 @@ public class ReserveListFrame extends javax.swing.JFrame {
             SELECT 
                 Reserves.ReserveID, 
                 Reserves.CarID, 
-                Reserves.RentedDate, 
+                Reserves.ReserveDate, 
                 Reserves.Brand, 
                 Reserves.Model, 
                 client.full_name AS Client
@@ -121,7 +121,7 @@ public class ReserveListFrame extends javax.swing.JFrame {
             while (rs.next()) {
                 int reserveID = rs.getInt("ReserveID");
                 int carID = rs.getInt("CarID");
-                String rentedDate = rs.getString("RentedDate");
+                String rentedDate = rs.getString("ReserveDate");
                 String brand = rs.getString("Brand");
                 String modelStr = rs.getString("Model");
                 String clientName = rs.getString("Client");

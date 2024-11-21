@@ -128,7 +128,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void rentCarBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rentCarBtnActionPerformed
-         int selectedRow = rentCarTable.getSelectedRow();
+        int selectedRow = rentCarTable.getSelectedRow();
 
         if (selectedRow != -1) {
             try {
@@ -258,6 +258,69 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_rentCarBtnActionPerformed
 
+
+    private void rentCarInDatabase(int carID, String brand, String model, double payment, int clientID) {
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+            String clientQuery = "SELECT full_name FROM client WHERE id = ?";
+            String clientFullName = null;
+            try (PreparedStatement clientStmt = con.prepareStatement(clientQuery)) {
+                clientStmt.setInt(1, clientID);
+                try (ResultSet rs = clientStmt.executeQuery()) {
+                    if (rs.next()) {
+                        clientFullName = rs.getString("full_name");
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Client not found.", "Client Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
+            }
+
+            String insertRentalQuery = "INSERT INTO Rentals (CarID, Brand, Model, ClientID, full_name) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement rentalStmt = con.prepareStatement(insertRentalQuery)) {
+                rentalStmt.setInt(1, carID);
+                rentalStmt.setString(2, brand);
+                rentalStmt.setString(3, model);
+                rentalStmt.setInt(4, clientID);
+                rentalStmt.setString(5, clientFullName);
+
+                int rowsInserted = rentalStmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    String updateCarQuery = "UPDATE Cars SET isAvailable = ? WHERE CarID = ?";
+                    try (PreparedStatement updateStmt = con.prepareStatement(updateCarQuery)) {
+                        updateStmt.setBoolean(1, false);
+                        updateStmt.setInt(2, carID);
+                        updateStmt.executeUpdate();
+                    }
+
+                    String paymentQuery = "INSERT INTO payments (CarID, ClientID, full_name, Brand, Model, Rent_Payments) VALUES (?, ?, ?, ?, ?, ?)";
+                    try (PreparedStatement paymentStmt = con.prepareStatement(paymentQuery)) {
+                        paymentStmt.setInt(1, carID);
+                        paymentStmt.setInt(2, clientID);
+                        paymentStmt.setString(3, clientFullName);
+                        paymentStmt.setString(4, brand);
+                        paymentStmt.setString(5, model);
+                        paymentStmt.setDouble(6, payment);
+
+                        paymentStmt.executeUpdate();
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Car rented successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    loadCarsIntoTable(); 
+                } else {
+                    JOptionPane.showMessageDialog(this, "Failed to rent the car. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    
+    
     private void BackToMenuBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackToMenuBtn2ActionPerformed
         this.dispose();
         Home_client mainMenu = new Home_client();
@@ -277,6 +340,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         DateEndedSp.setEditor(editorEnd);
     }//GEN-LAST:event_formWindowOpened
 
+    
     private void ReserveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReserveBtnActionPerformed
         int selectedRow = rentCarTable.getSelectedRow();
 
@@ -301,48 +365,33 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                 String brand = brandObj.toString();
                 String model = modelObj.toString();
 
-                boolean isAvailable;
-                if (availabilityObj instanceof Boolean) {
-                    isAvailable = (Boolean) availabilityObj;
-                } else if (availabilityObj.toString().equalsIgnoreCase("true") || availabilityObj.toString().equalsIgnoreCase("available")) {
-                    isAvailable = true;
-                } else if (availabilityObj.toString().equalsIgnoreCase("false") || availabilityObj.toString().equalsIgnoreCase("unavailable")) {
-                    isAvailable = false;
-                } else {
-                    isAvailable = Integer.parseInt(availabilityObj.toString()) == 1;
-                }
-
+                boolean isAvailable = parseAvailability(availabilityObj);
                 if (!isAvailable) {
                     JOptionPane.showMessageDialog(this, "Selected car is not available for reservation.", "Car Unavailable", JOptionPane.WARNING_MESSAGE);
                     return;
                 }
 
-                Date rentedDate = (Date) DateStartedSp.getValue();
-                if (rentedDate == null) {
-                    JOptionPane.showMessageDialog(this, "Please select a valid rental date.", "Date Error", JOptionPane.ERROR_MESSAGE);
+                Date startDate = (Date) DateStartedSp.getValue();
+                if (startDate == null) {
+                    JOptionPane.showMessageDialog(this, "Please select a valid start date.", "Date Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                String clientIDInput = JOptionPane.showInputDialog(this, "Enter the Client ID:", "Client Information", JOptionPane.PLAIN_MESSAGE);
-                if (clientIDInput == null || clientIDInput.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Client ID is required to proceed.", "Client Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                int clientID = getClientID();
+                if (clientID == -1) {
+                    return; 
                 }
 
-                int clientID;
-                try {
-                    clientID = Integer.parseInt(clientIDInput.trim());
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid Client ID. Please enter a numeric value.", "Client Error", JOptionPane.ERROR_MESSAGE);
-                    return;
+                double pricePerDay = Double.parseDouble(rentCarTable.getValueAt(selectedRow, 4).toString());
+                double totalPrice = pricePerDay;
+                double minimumDownPayment = totalPrice * 0.3;
+
+                if (!confirmReservation(carID, brand, model, startDate, totalPrice)) {
+                    return; 
                 }
 
-                reserveCarInDatabase(carID, brand, model, clientID, rentedDate);
+                handlePayment(carID, brand, model, clientID, startDate, totalPrice, minimumDownPayment);
 
-            } catch (IndexOutOfBoundsException e) {
-                JOptionPane.showMessageDialog(this, "Table column index out of bounds. Please check the table structure.", "Error", JOptionPane.ERROR_MESSAGE);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Error parsing numeric data: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Unexpected error: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -351,8 +400,110 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ReserveBtnActionPerformed
 
+    private boolean parseAvailability(Object availabilityObj) {
+        if (availabilityObj instanceof Boolean) {
+            return (Boolean) availabilityObj;
+        } else if (availabilityObj.toString().equalsIgnoreCase("true") || availabilityObj.toString().equalsIgnoreCase("available")) {
+            return true;
+        } else if (availabilityObj.toString().equalsIgnoreCase("false") || availabilityObj.toString().equalsIgnoreCase("unavailable")) {
+            return false;
+        } else {
+            return Integer.parseInt(availabilityObj.toString()) == 1;
+        }
+    }
+
+
+    private int getClientID() {
+        String clientIDInput = JOptionPane.showInputDialog(this, 
+                "Enter the Client ID:", 
+                "Client Information", 
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (clientIDInput == null || clientIDInput.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Client ID is required to proceed.", "Client Error", JOptionPane.ERROR_MESSAGE);
+            return -1;
+        }
+
+        try {
+            return Integer.parseInt(clientIDInput.trim());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid Client ID. Please enter a numeric value.", "Client Error", JOptionPane.ERROR_MESSAGE);
+            return -1;
+        }
+    }
+
+
+    private boolean confirmReservation(int carID, String brand, String model, Date startDate, double totalPrice) {
+        String message = "You selected:\n" +
+                "Car ID: " + carID + "\n" +
+                "Brand: " + brand + "\n" +
+                "Model: " + model + "\n" +
+                "Reservation Start Date: " + startDate + "\n" +
+                "Total Price: $" + totalPrice + "\n\n" +
+                "Do you want to proceed with the reservation?";
+
+        int option = JOptionPane.showConfirmDialog(this, message, "Confirm Reservation", JOptionPane.YES_NO_OPTION);
+        return option == JOptionPane.YES_OPTION;
+    }
+
+
+    private void handlePayment(int carID, String brand, String model, int clientID, Date startDate, double totalPrice, double minimumDownPayment) {
+        String paymentType = JOptionPane.showInputDialog(this, 
+                "Is this a Downpayment or Fullpayment? (Enter 'down' or 'full')", 
+                "Payment Type", 
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (paymentType == null || paymentType.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please specify the payment type.", "Payment Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        paymentType = paymentType.trim().toLowerCase();
+        if (!paymentType.equals("down") && !paymentType.equals("full")) {
+            JOptionPane.showMessageDialog(this, "Invalid payment type. Please enter 'down' or 'full'.", "Payment Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String input = JOptionPane.showInputDialog(this, 
+                "Enter your payment amount for the " + paymentType + " payment:\n" +
+                "Total Price: $" + totalPrice + 
+                (paymentType.equals("down") ? "\nMinimum Down Payment: $" + minimumDownPayment : ""),
+                "Payment Input", 
+                JOptionPane.PLAIN_MESSAGE);
+
+        if (input == null || input.trim().isEmpty()) {
+            return; 
+        }
+
+        try {
+            double payment = Double.parseDouble(input.trim());
+
+            if (paymentType.equals("down") && payment < minimumDownPayment) {
+                JOptionPane.showMessageDialog(this, 
+                        "The payment for a down payment must be at least $" + minimumDownPayment + ". Please try again.", 
+                        "Insufficient Payment", 
+                        JOptionPane.WARNING_MESSAGE);
+            } else if (paymentType.equals("full") && payment < totalPrice) {
+                JOptionPane.showMessageDialog(this, 
+                        "The payment for a full payment must be at least $" + totalPrice + ". Please try again.", 
+                        "Insufficient Payment", 
+                        JOptionPane.WARNING_MESSAGE);
+            } else {
+                boolean isFullPayment = paymentType.equals("full");
+                reserveCarInDatabase(carID, brand, model, clientID, startDate, payment, isFullPayment);
+
+                JOptionPane.showMessageDialog(this, 
+                        "Car reserved successfully!\nPayment: $" + payment + 
+                        "\nPayment Type: " + paymentType, 
+                        "Success", 
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Invalid payment amount entered. Please enter a numeric value.", "Input Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     
-    private void reserveCarInDatabase(int carID, String brand, String model, int clientID, Date dateRented) {
+    private void reserveCarInDatabase(int carID, String brand, String model, int clientID, Date dateRented, double payment, boolean isFullPayment) {
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
         String dbUser = "root";
         String dbPassword = "";
@@ -372,7 +523,8 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                 }
             }
 
-            String reserveQuery = "INSERT INTO reserves (CarID, RentedDate, Brand, Model, full_name, ClientID) VALUES (?, ?, ?, ?, ?, ?)";
+            
+            String reserveQuery = "INSERT INTO reserves (CarID, ReserveDate, Brand, Model, full_name, ClientID) VALUES (?, ?, ?, ?, ?, ?)";
             try (PreparedStatement reserveStmt = con.prepareStatement(reserveQuery)) {
                 reserveStmt.setInt(1, carID);
                 reserveStmt.setTimestamp(2, new java.sql.Timestamp(dateRented.getTime()));
@@ -383,11 +535,27 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
 
                 int rowsInserted = reserveStmt.executeUpdate();
                 if (rowsInserted > 0) {
-                    String updateQuery = "UPDATE Cars SET isAvailable = ? WHERE CarID = ?";
-                    try (PreparedStatement updateStmt = con.prepareStatement(updateQuery)) {
-                        updateStmt.setBoolean(1, false);
-                        updateStmt.setInt(2, carID);
+                    String updateCarQuery = "UPDATE Cars SET isAvailable = ?, isReserved = ? WHERE CarID = ?";
+                    try (PreparedStatement updateStmt = con.prepareStatement(updateCarQuery)) {
+                        updateStmt.setBoolean(1, false); 
+                        updateStmt.setBoolean(2, true); 
+                        updateStmt.setInt(3, carID);
                         updateStmt.executeUpdate();
+                    }
+
+                    String paymentQuery = isFullPayment
+                        ? "INSERT INTO payments (CarID, ClientID, full_name, Brand, Model, ReserveFull_Payments) VALUES (?, ?, ?, ?, ?, ?)"
+                        : "INSERT INTO payments (CarID, ClientID, full_name, Brand, Model, ReserveDown_Payments) VALUES (?, ?, ?, ?, ?, ?)";
+
+                    try (PreparedStatement paymentStmt = con.prepareStatement(paymentQuery)) {
+                        paymentStmt.setInt(1, carID);
+                        paymentStmt.setInt(2, clientID);
+                        paymentStmt.setString(3, clientFullName);
+                        paymentStmt.setString(4, brand);
+                        paymentStmt.setString(5, model);
+                        paymentStmt.setDouble(6, payment);
+
+                        paymentStmt.executeUpdate();
                     }
 
                     JOptionPane.showMessageDialog(this, "Car reserved successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -402,123 +570,45 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
     }
 
     
-    private void rentCarInDatabase(int carID, String brand, String model, double payment, int clientID) {
-        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
-        String dbUser = "root";
-        String dbPassword = "";
-
-        try {
-            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
-
-            String checkQuery = "SELECT isAvailable FROM Cars WHERE CarID = ?";
-            PreparedStatement checkStmt = con.prepareStatement(checkQuery);
-            checkStmt.setInt(1, carID);
-            ResultSet rs = checkStmt.executeQuery();
-
-            if (rs.next()) {
-                boolean isAvailable = rs.getBoolean("isAvailable");
-                if (!isAvailable) {
-                    JOptionPane.showMessageDialog(null, "Car is already rented.", "Unavailable", JOptionPane.WARNING_MESSAGE);
-                    rs.close();
-                    checkStmt.close();
-                    con.close();
-                    return;
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Car not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                rs.close();
-                checkStmt.close();
-                con.close();
-                return;
-            }
-            rs.close();
-            checkStmt.close();
-
-            String clientQuery = "SELECT full_name FROM client WHERE id = ?";
-            PreparedStatement clientStmt = con.prepareStatement(clientQuery);
-            clientStmt.setInt(1, clientID);
-            ResultSet clientRs = clientStmt.executeQuery();
-
-            String fullName = null;
-            if (clientRs.next()) {
-                fullName = clientRs.getString("full_name");
-            } else {
-                JOptionPane.showMessageDialog(null, "Client not found.", "Error", JOptionPane.ERROR_MESSAGE);
-                clientRs.close();
-                clientStmt.close();
-                con.close();
-                return;
-            }
-            clientRs.close();
-            clientStmt.close();
-
-            String insertQuery = "INSERT INTO Rentals (CarID, Brand, Model, ClientID, full_name) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement insertStmt = con.prepareStatement(insertQuery);
-            insertStmt.setInt(1, carID);
-            insertStmt.setString(2, brand);
-            insertStmt.setString(3, model);
-            insertStmt.setInt(4, clientID);  
-            insertStmt.setString(5, fullName);  
-
-            int rowsInserted = insertStmt.executeUpdate();
-
-            if (rowsInserted > 0) {
-                String updateQuery = "UPDATE Cars SET isAvailable = ? WHERE CarID = ?";
-                PreparedStatement updateStmt = con.prepareStatement(updateQuery);
-                updateStmt.setBoolean(1, false);  
-                updateStmt.setInt(2, carID);
-                updateStmt.executeUpdate();
-                updateStmt.close();
-
-                JOptionPane.showMessageDialog(null, "Car rented successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                loadCarsIntoTable();  
-            } else {
-                JOptionPane.showMessageDialog(null, "Failed to rent the car. Please try again.", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-
-            insertStmt.close();
-            con.close();
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Database error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+    
     
     public void loadCarsIntoTable() {
         DefaultTableModel model = (DefaultTableModel) rentCarTable.getModel();
-
         model.setRowCount(0);
 
         String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
         String dbUser = "root";
         String dbPassword = "";
 
-        try {
-            Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars";
+            try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+                while (rs.next()) {
+                    int carID = rs.getInt("CarID");
+                    String brand = rs.getString("Brand");
+                    String modelText = rs.getString("Model");
+                    int year = rs.getInt("Year");
+                    double price = rs.getDouble("Price");
+                    boolean isAvailable = rs.getBoolean("isAvailable");
+                    boolean isReserved = rs.getBoolean("isReserved");
 
-            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable FROM Cars";
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(query);
+                    String availabilityText;
+                    if (isReserved) {
+                        availabilityText = "Reserved";
+                    } else if (!isAvailable) {
+                        availabilityText = "Not Available";
+                    } else {
+                        availabilityText = "Available";
+                    }
 
-            while (rs.next()) {
-                int carID = rs.getInt("CarID");
-                String brand = rs.getString("Brand");
-                String modelText = rs.getString("Model");
-                int year = rs.getInt("Year");
-                double price = rs.getDouble("Price");
-                boolean isAvailable = rs.getBoolean("isAvailable");
-
-                String availabilityText = isAvailable ? "Available" : "Not Available";
-                model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                    model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                }
             }
-
-            rs.close();
-            stmt.close();
-            con.close();
-
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(new JFrame(), "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     
     
     public static void main(String args[]) {

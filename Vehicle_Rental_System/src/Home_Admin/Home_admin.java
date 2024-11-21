@@ -21,6 +21,7 @@ public class Home_admin extends javax.swing.JFrame {
         ShowRentsBtn = new javax.swing.JButton();
         ViewClientsBtn = new javax.swing.JButton();
         LogOutBtn = new javax.swing.JButton();
+        TotalRevenueBtn = new javax.swing.JButton();
         CarsBtn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
 
@@ -49,7 +50,7 @@ public class Home_admin extends javax.swing.JFrame {
                 ShowRentsBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ShowRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 270, 110, 40));
+        jPanel1.add(ShowRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 110, 40));
 
         ViewClientsBtn.setBackground(new java.awt.Color(255, 255, 255));
         ViewClientsBtn.setForeground(new java.awt.Color(0, 0, 0));
@@ -70,6 +71,16 @@ public class Home_admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(LogOutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 110, 40));
+
+        TotalRevenueBtn.setBackground(new java.awt.Color(0, 0, 0));
+        TotalRevenueBtn.setForeground(new java.awt.Color(255, 255, 255));
+        TotalRevenueBtn.setText("Total Revenue");
+        TotalRevenueBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TotalRevenueBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(TotalRevenueBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 270, 120, 40));
 
         CarsBtn.setBackground(new java.awt.Color(0, 0, 0));
         CarsBtn.setForeground(new java.awt.Color(255, 255, 255));
@@ -135,6 +146,13 @@ public class Home_admin extends javax.swing.JFrame {
              this.dispose();
     }//GEN-LAST:event_CarsBtnActionPerformed
 
+    private void TotalRevenueBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalRevenueBtnActionPerformed
+             TotalRevenueFrame TotalRevenueFrame = new TotalRevenueFrame();
+             TotalRevenueFrame.setVisible(true);
+             TotalRevenueFrame.pack();
+             TotalRevenueFrame.setLocationRelativeTo(null); 
+    }//GEN-LAST:event_TotalRevenueBtnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -183,6 +201,7 @@ public class Home_admin extends javax.swing.JFrame {
     private javax.swing.JButton LogOutBtn;
     private javax.swing.JButton ReserveListBtn;
     private javax.swing.JButton ShowRentsBtn;
+    private javax.swing.JButton TotalRevenueBtn;
     private javax.swing.JButton ViewClientsBtn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
