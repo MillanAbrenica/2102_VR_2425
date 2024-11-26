@@ -1,5 +1,6 @@
 package Home_Client;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -15,6 +16,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import javax.swing.JOptionPane;
+import static vehicle_rental_system.Login.loggedInClientID;
+import static vehicle_rental_system.Login.loggedInClientName;
 
 
 
@@ -23,6 +26,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
     public RentNReserveCarFrame() {
         initComponents();
         loadCarsIntoTable();
+        WelcomeMsgTxtf.setText("Welcome, " + loggedInClientName + "!");
     }
 
     
@@ -31,7 +35,6 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         rentCarTable = new javax.swing.JTable();
         BackToMenuBtn2 = new javax.swing.JButton();
@@ -39,8 +42,13 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         DateEndedSp = new javax.swing.JSpinner();
+        WelcomeMsgTxtf = new javax.swing.JTextField();
         DateStartedSp = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
+        RefreshBtn = new javax.swing.JButton();
+        SearchFieldTxtf = new javax.swing.JTextField();
         ReserveBtn = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("RENT");
@@ -54,12 +62,8 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Magneto", 2, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Welcome to Nextstop Rentals");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 30, 300, -1));
-
+        rentCarTable.setBackground(new java.awt.Color(0, 0, 0));
+        rentCarTable.setForeground(new java.awt.Color(255, 255, 255));
         rentCarTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -75,43 +79,105 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         jScrollPane1.setViewportView(rentCarTable);
         rentCarTable.getAccessibleContext().setAccessibleName("Car Table");
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(382, 60, 480, 480));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(382, 130, 480, 410));
 
-        BackToMenuBtn2.setText("Back To Main Menu");
+        BackToMenuBtn2.setBackground(new java.awt.Color(0, 0, 0));
+        BackToMenuBtn2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        BackToMenuBtn2.setForeground(new java.awt.Color(255, 255, 255));
+        BackToMenuBtn2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/back (white).png"))); // NOI18N
+        BackToMenuBtn2.setText("Back To Menu");
         BackToMenuBtn2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuBtn2ActionPerformed(evt);
             }
         });
-        jPanel1.add(BackToMenuBtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 571, -1, -1));
+        jPanel1.add(BackToMenuBtn2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 560, -1, 30));
 
+        jButton1.setBackground(new java.awt.Color(0, 0, 0));
+        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/Rent Car.png"))); // NOI18N
         jButton1.setText("Rent Car");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rentCarBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, 110, 40));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 370, 130, 50));
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Date Ended");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 260, -1, -1));
 
         jLabel3.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Date Rented");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+        jLabel3.setText("Date Rent/Reserve");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
         jPanel1.add(DateEndedSp, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 260, 160, -1));
+
+        WelcomeMsgTxtf.setBackground(new java.awt.Color(0, 0, 0));
+        WelcomeMsgTxtf.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        WelcomeMsgTxtf.setForeground(new java.awt.Color(255, 255, 255));
+        WelcomeMsgTxtf.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        WelcomeMsgTxtf.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        WelcomeMsgTxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                WelcomeMsgTxtfActionPerformed(evt);
+            }
+        });
+        jPanel1.add(WelcomeMsgTxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 380, 90));
         jPanel1.add(DateStartedSp, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 200, 160, -1));
 
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Search Brand:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 90, 110, -1));
+
+        RefreshBtn.setBackground(new java.awt.Color(0, 0, 0));
+        RefreshBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        RefreshBtn.setForeground(new java.awt.Color(255, 255, 255));
+        RefreshBtn.setText("Refresh");
+        RefreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RefreshBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(780, 550, -1, -1));
+
+        SearchFieldTxtf.setBackground(new java.awt.Color(0, 0, 0));
+        SearchFieldTxtf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SearchFieldTxtf.setForeground(new java.awt.Color(255, 255, 255));
+        SearchFieldTxtf.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        SearchFieldTxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchFieldTxtfActionPerformed(evt);
+            }
+        });
+        SearchFieldTxtf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                SearchFieldTxtfKeyPressed(evt);
+            }
+        });
+        jPanel1.add(SearchFieldTxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 90, 90, 20));
+
+        ReserveBtn.setBackground(new java.awt.Color(0, 0, 0));
+        ReserveBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ReserveBtn.setForeground(new java.awt.Color(255, 255, 255));
+        ReserveBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/Reserve Btn.png"))); // NOI18N
         ReserveBtn.setText("Reserve Car");
         ReserveBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ReserveBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 370, 110, 40));
+        jPanel1.add(ReserveBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 370, 150, 50));
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards of cars and client.png"))); // NOI18N
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,23 +231,13 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
 
                 double totalPrice = rentalDays * pricePerDay;
 
-                String clientIDInput = JOptionPane.showInputDialog(this, 
-                    "Enter the Client ID:", 
-                    "Client Information", 
-                    JOptionPane.PLAIN_MESSAGE);
-
-                if (clientIDInput == null || clientIDInput.trim().isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "Client ID is required to proceed.", "Client Error", JOptionPane.ERROR_MESSAGE);
+                // Use loggedInClientID set during login
+                if (loggedInClientID == 0) { // Ensure the user is logged in
+                    JOptionPane.showMessageDialog(this, "You need to log in first.", "Login Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                int clientID;
-                try {
-                    clientID = Integer.parseInt(clientIDInput.trim());
-                } catch (NumberFormatException e) {
-                    JOptionPane.showMessageDialog(this, "Invalid Client ID. Please enter a numeric value.", "Client Error", JOptionPane.ERROR_MESSAGE);
-                    return;
-                }
+                int clientID = loggedInClientID; // Retrieve the logged-in Client ID
 
                 String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
                 String dbUser = "root";
@@ -212,16 +268,16 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                     "Car ID: " + carID + "\n" +
                     "Brand: " + brand + "\n" +
                     "Model: " + model + "\n" +
-                    "Price Per Day: $" + pricePerDay + "\n" +
+                    "Price Per Day: Php" + pricePerDay + "\n" +
                     "Rental Days: " + rentalDays + "\n" +
-                    "Total Price: $" + totalPrice + "\n\n" +
+                    "Total Price: Php" + totalPrice + "\n\n" +
                     "Do you want to proceed with the rental?";
 
                 int option = JOptionPane.showConfirmDialog(this, message, "Confirm Rental", JOptionPane.YES_NO_OPTION);
 
                 if (option == JOptionPane.YES_OPTION) {
                     String input = JOptionPane.showInputDialog(this, 
-                        "Enter your payment amount ( Total Price: $" + totalPrice +" ):", 
+                        "Enter your payment amount ( Total Price: Php" + totalPrice + " ):", 
                         "Payment Input", 
                         JOptionPane.PLAIN_MESSAGE);
 
@@ -236,7 +292,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                             } else {
                                 rentCarInDatabase(carID, brand, model, payment, clientID);
                                 JOptionPane.showMessageDialog(this, 
-                                    "Car rented successfully!\nPayment: $" + payment, 
+                                    "Car rented successfully!\nPayment: Php" + payment, 
                                     "Success", 
                                     JOptionPane.INFORMATION_MESSAGE);
                             }
@@ -400,6 +456,124 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ReserveBtnActionPerformed
 
+    private void WelcomeMsgTxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WelcomeMsgTxtfActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_WelcomeMsgTxtfActionPerformed
+
+    private void SearchFieldTxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchFieldTxtfActionPerformed
+       String searchBrand = SearchFieldTxtf.getText().trim();
+
+        if (searchBrand.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a brand to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        DefaultTableModel model = (DefaultTableModel) rentCarTable.getModel();
+        model.setRowCount(0);
+
+        String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+        String dbUser = "root";
+        String dbPassword = "";
+
+        try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+            String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars WHERE Brand LIKE ?";
+            try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                pstmt.setString(1, "%" + searchBrand + "%");
+                try (ResultSet rs = pstmt.executeQuery()) {
+                    boolean found = false;
+                    while (rs.next()) {
+                        found = true;
+                        int carID = rs.getInt("CarID");
+                        String brand = rs.getString("Brand");
+                        String modelText = rs.getString("Model");
+                        int year = rs.getInt("Year");
+                        double price = rs.getDouble("Price");
+                        boolean isAvailable = rs.getBoolean("isAvailable");
+                        boolean isReserved = rs.getBoolean("isReserved");
+
+                        String availabilityText;
+                        if (isReserved) {
+                            availabilityText = "Reserved";
+                        } else if (!isAvailable) {
+                            availabilityText = "Not Available";
+                        } else {
+                            availabilityText = "Available";
+                        }
+
+                        model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                    }
+
+                    if (!found) {
+                        JOptionPane.showMessageDialog(this, "No cars found for the brand: " + searchBrand, "No Results", JOptionPane.INFORMATION_MESSAGE);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_SearchFieldTxtfActionPerformed
+
+    private void SearchFieldTxtfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchFieldTxtfKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Trigger the search logic
+            String searchBrand = SearchFieldTxtf.getText().trim();
+
+            if (searchBrand.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a brand to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) rentCarTable.getModel();
+            model.setRowCount(0);
+
+            String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+            String dbUser = "root";
+            String dbPassword = "";
+
+            try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+                String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars WHERE Brand LIKE ?";
+                try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                    pstmt.setString(1, "%" + searchBrand + "%");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        boolean found = false;
+                        while (rs.next()) {
+                            found = true;
+                            int carID = rs.getInt("CarID");
+                            String brand = rs.getString("Brand");
+                            String modelText = rs.getString("Model");
+                            int year = rs.getInt("Year");
+                            double price = rs.getDouble("Price");
+                            boolean isAvailable = rs.getBoolean("isAvailable");
+                            boolean isReserved = rs.getBoolean("isReserved");
+
+                            String availabilityText;
+                            if (isReserved) {
+                                availabilityText = "Reserved";
+                            } else if (!isAvailable) {
+                                availabilityText = "Not Available";
+                            } else {
+                                availabilityText = "Available";
+                            }
+
+                            model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                        }
+
+                        if (!found) {
+                            JOptionPane.showMessageDialog(this, "No cars found for the brand: " + searchBrand, "No Results", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_SearchFieldTxtfKeyPressed
+
+    private void RefreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshBtnActionPerformed
+        SearchFieldTxtf.setText(""); 
+        loadCarsIntoTable();
+    }//GEN-LAST:event_RefreshBtnActionPerformed
+
     private boolean parseAvailability(Object availabilityObj) {
         if (availabilityObj instanceof Boolean) {
             return (Boolean) availabilityObj;
@@ -414,22 +588,11 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
 
 
     private int getClientID() {
-        String clientIDInput = JOptionPane.showInputDialog(this, 
-                "Enter the Client ID:", 
-                "Client Information", 
-                JOptionPane.PLAIN_MESSAGE);
-
-        if (clientIDInput == null || clientIDInput.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Client ID is required to proceed.", "Client Error", JOptionPane.ERROR_MESSAGE);
+        if (loggedInClientID == 0) { // Ensure the client is logged in
+            JOptionPane.showMessageDialog(this, "You need to log in first to proceed.", "Login Error", JOptionPane.ERROR_MESSAGE);
             return -1;
         }
-
-        try {
-            return Integer.parseInt(clientIDInput.trim());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Invalid Client ID. Please enter a numeric value.", "Client Error", JOptionPane.ERROR_MESSAGE);
-            return -1;
-        }
+        return loggedInClientID; // Automatically return the stored Client ID
     }
 
 
@@ -439,7 +602,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                 "Brand: " + brand + "\n" +
                 "Model: " + model + "\n" +
                 "Reservation Start Date: " + startDate + "\n" +
-                "Total Price: $" + totalPrice + "\n\n" +
+                "Total Price: Php" + totalPrice + "\n\n" +
                 "Do you want to proceed with the reservation?";
 
         int option = JOptionPane.showConfirmDialog(this, message, "Confirm Reservation", JOptionPane.YES_NO_OPTION);
@@ -466,8 +629,8 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
 
         String input = JOptionPane.showInputDialog(this, 
                 "Enter your payment amount for the " + paymentType + " payment:\n" +
-                "Total Price: $" + totalPrice + 
-                (paymentType.equals("down") ? "\nMinimum Down Payment: $" + minimumDownPayment : ""),
+                "Total Price: Php" + totalPrice + 
+                (paymentType.equals("down") ? "\nMinimum Down Payment: Php" + minimumDownPayment : ""),
                 "Payment Input", 
                 JOptionPane.PLAIN_MESSAGE);
 
@@ -480,12 +643,12 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
 
             if (paymentType.equals("down") && payment < minimumDownPayment) {
                 JOptionPane.showMessageDialog(this, 
-                        "The payment for a down payment must be at least $" + minimumDownPayment + ". Please try again.", 
+                        "The payment for a down payment must be at least Php" + minimumDownPayment + ". Please try again.", 
                         "Insufficient Payment", 
                         JOptionPane.WARNING_MESSAGE);
             } else if (paymentType.equals("full") && payment < totalPrice) {
                 JOptionPane.showMessageDialog(this, 
-                        "The payment for a full payment must be at least $" + totalPrice + ". Please try again.", 
+                        "The payment for a full payment must be at least Php" + totalPrice + ". Please try again.", 
                         "Insufficient Payment", 
                         JOptionPane.WARNING_MESSAGE);
             } else {
@@ -493,7 +656,7 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
                 reserveCarInDatabase(carID, brand, model, clientID, startDate, payment, isFullPayment);
 
                 JOptionPane.showMessageDialog(this, 
-                        "Car reserved successfully!\nPayment: $" + payment + 
+                        "Car reserved successfully!\nPayment: Php" + payment + 
                         "\nPayment Type: " + paymentType, 
                         "Success", 
                         JOptionPane.INFORMATION_MESSAGE);
@@ -641,11 +804,15 @@ public class RentNReserveCarFrame extends javax.swing.JFrame {
     private javax.swing.JButton BackToMenuBtn2;
     private javax.swing.JSpinner DateEndedSp;
     private javax.swing.JSpinner DateStartedSp;
+    private javax.swing.JButton RefreshBtn;
     private javax.swing.JButton ReserveBtn;
+    private javax.swing.JTextField SearchFieldTxtf;
+    private javax.swing.JTextField WelcomeMsgTxtf;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable rentCarTable;

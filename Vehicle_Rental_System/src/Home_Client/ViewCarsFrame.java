@@ -1,5 +1,6 @@
 package Home_Client;
 
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,10 +25,13 @@ public class ViewCarsFrame extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         BackToMenuBtn = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        SearchFieldTxtf = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        RefreshBtn = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         viewCarsTable = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VIEW");
@@ -36,25 +40,63 @@ public class ViewCarsFrame extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        BackToMenuBtn.setText("Back To Main Menu");
+        BackToMenuBtn.setBackground(new java.awt.Color(0, 0, 0));
+        BackToMenuBtn.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        BackToMenuBtn.setForeground(new java.awt.Color(255, 255, 255));
+        BackToMenuBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/back (white).png"))); // NOI18N
+        BackToMenuBtn.setText("Back To Menu");
         BackToMenuBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 571, -1, -1));
-
-        jLabel1.setFont(new java.awt.Font("Magneto", 1, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Welcome to NextStop Rentals");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 570, 150, 30));
 
         jLabel2.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel2.setFont(new java.awt.Font("Magneto", 1, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Car Dashboard");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 80, 150, -1));
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setText("Cars");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 60, 150, -1));
 
+        SearchFieldTxtf.setBackground(new java.awt.Color(0, 0, 0));
+        SearchFieldTxtf.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        SearchFieldTxtf.setForeground(new java.awt.Color(255, 255, 255));
+        SearchFieldTxtf.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        SearchFieldTxtf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SearchFieldTxtfActionPerformed(evt);
+            }
+        });
+        SearchFieldTxtf.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                SearchFieldTxtfKeyPressed(evt);
+            }
+        });
+        jPanel1.add(SearchFieldTxtf, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 80, 90, 20));
+
+        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Search Brand:");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(648, 80, 110, -1));
+
+        RefreshBtn.setBackground(new java.awt.Color(0, 0, 0));
+        RefreshBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        RefreshBtn.setForeground(new java.awt.Color(255, 255, 255));
+        RefreshBtn.setText("Refresh");
+        RefreshBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RefreshBtnActionPerformed(evt);
+            }
+        });
+        jPanel1.add(RefreshBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(770, 480, -1, -1));
+
+        jScrollPane1.setBackground(new java.awt.Color(0, 0, 0));
+        jScrollPane1.setForeground(new java.awt.Color(255, 255, 255));
+
+        viewCarsTable.setBackground(new java.awt.Color(0, 0, 0));
+        viewCarsTable.setForeground(new java.awt.Color(255, 255, 255));
         viewCarsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null},
@@ -69,7 +111,10 @@ public class ViewCarsFrame extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(viewCarsTable);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 110, 820, 430));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(42, 110, 810, 360));
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/Client_dashboards(900 x 600).png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,6 +137,120 @@ public class ViewCarsFrame extends javax.swing.JFrame {
         Home_client mainMenu = new Home_client();
         mainMenu.setVisible(true);
     }//GEN-LAST:event_BackToMenuBtnActionPerformed
+
+    private void SearchFieldTxtfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SearchFieldTxtfActionPerformed
+        String searchBrand = SearchFieldTxtf.getText().trim();
+
+            if (searchBrand.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a brand to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) viewCarsTable.getModel();
+            model.setRowCount(0);
+
+            String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+            String dbUser = "root";
+            String dbPassword = "";
+
+            try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+                String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars WHERE Brand LIKE ?";
+                try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                    pstmt.setString(1, "%" + searchBrand + "%");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        boolean found = false;
+                        while (rs.next()) {
+                            found = true;
+                            int carID = rs.getInt("CarID");
+                            String brand = rs.getString("Brand");
+                            String modelText = rs.getString("Model");
+                            int year = rs.getInt("Year");
+                            double price = rs.getDouble("Price");
+                            boolean isAvailable = rs.getBoolean("isAvailable");
+                            boolean isReserved = rs.getBoolean("isReserved");
+
+                            String availabilityText;
+                            if (isReserved) {
+                                availabilityText = "Reserved";
+                            } else if (!isAvailable) {
+                                availabilityText = "Not Available";
+                            } else {
+                                availabilityText = "Available";
+                            }
+
+                            model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                        }
+
+                        if (!found) {
+                            JOptionPane.showMessageDialog(this, "No cars found for the brand: " + searchBrand, "No Results", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+    }//GEN-LAST:event_SearchFieldTxtfActionPerformed
+
+    private void SearchFieldTxtfKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_SearchFieldTxtfKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            // Trigger the search logic
+            String searchBrand = SearchFieldTxtf.getText().trim();
+
+            if (searchBrand.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter a brand to search.", "Input Required", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            DefaultTableModel model = (DefaultTableModel) viewCarsTable.getModel();
+            model.setRowCount(0);
+
+            String dbUrl = "jdbc:mysql://localhost:3306/vehiclerentaldb";
+            String dbUser = "root";
+            String dbPassword = "";
+
+            try (Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword)) {
+                String query = "SELECT CarID, Brand, Model, Year, Price, isAvailable, isReserved FROM Cars WHERE Brand LIKE ?";
+                try (PreparedStatement pstmt = con.prepareStatement(query)) {
+                    pstmt.setString(1, "%" + searchBrand + "%");
+                    try (ResultSet rs = pstmt.executeQuery()) {
+                        boolean found = false;
+                        while (rs.next()) {
+                            found = true;
+                            int carID = rs.getInt("CarID");
+                            String brand = rs.getString("Brand");
+                            String modelText = rs.getString("Model");
+                            int year = rs.getInt("Year");
+                            double price = rs.getDouble("Price");
+                            boolean isAvailable = rs.getBoolean("isAvailable");
+                            boolean isReserved = rs.getBoolean("isReserved");
+
+                            String availabilityText;
+                            if (isReserved) {
+                                availabilityText = "Reserved";
+                            } else if (!isAvailable) {
+                                availabilityText = "Not Available";
+                            } else {
+                                availabilityText = "Available";
+                            }
+
+                            model.addRow(new Object[]{carID, brand, modelText, year, price, availabilityText});
+                        }
+
+                        if (!found) {
+                            JOptionPane.showMessageDialog(this, "No cars found for the brand: " + searchBrand, "No Results", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(this, "Error: " + e.getMessage(), "Database Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_SearchFieldTxtfKeyPressed
+
+    private void RefreshBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RefreshBtnActionPerformed
+        SearchFieldTxtf.setText("");
+        loadCarsIntoTable();
+    }//GEN-LAST:event_RefreshBtnActionPerformed
 
     
     public void loadCarsIntoTable() {
@@ -175,8 +334,11 @@ public class ViewCarsFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BackToMenuBtn;
+    private javax.swing.JButton RefreshBtn;
+    private javax.swing.JTextField SearchFieldTxtf;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable viewCarsTable;

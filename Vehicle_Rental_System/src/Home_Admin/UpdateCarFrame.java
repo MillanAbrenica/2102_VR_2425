@@ -48,13 +48,14 @@ public class UpdateCarFrame extends javax.swing.JFrame {
 
         BackToMenuBtn.setBackground(new java.awt.Color(0, 0, 0));
         BackToMenuBtn.setForeground(new java.awt.Color(255, 255, 255));
-        BackToMenuBtn.setText("Back To Main Menu");
+        BackToMenuBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/back (white).png"))); // NOI18N
+        BackToMenuBtn.setText("Back To Menu");
         BackToMenuBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 140, 30));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Car ID");
@@ -135,7 +136,7 @@ public class UpdateCarFrame extends javax.swing.JFrame {
         });
         jPanel1.add(carIDcombobox, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 190, -1));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards_add.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/add, update, remove.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 350));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());

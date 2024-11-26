@@ -40,13 +40,14 @@ public class RemoveCarFrame extends javax.swing.JFrame {
 
         BackToMenuBtn.setBackground(new java.awt.Color(0, 0, 0));
         BackToMenuBtn.setForeground(new java.awt.Color(255, 255, 255));
-        BackToMenuBtn.setText("Back To Main Menu");
+        BackToMenuBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/back (white).png"))); // NOI18N
+        BackToMenuBtn.setText("Back To Menu");
         BackToMenuBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackToMenuBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, -1, -1));
+        jPanel1.add(BackToMenuBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 320, 150, 30));
 
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Car ID");
@@ -76,7 +77,7 @@ public class RemoveCarFrame extends javax.swing.JFrame {
         });
         jPanel1.add(CarIDCB, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 90, 160, -1));
 
-        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/dashboards_add.png"))); // NOI18N
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/add, update, remove.png"))); // NOI18N
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 350));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -115,25 +116,46 @@ public class RemoveCarFrame extends javax.swing.JFrame {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection(dbUrl, dbUser, dbPassword);
 
-            String query = "DELETE FROM Cars WHERE CarID = ?";
-            PreparedStatement pst = con.prepareStatement(query);
+            // Step 1: Check if the car is available and not reserved
+            String checkQuery = "SELECT isAvailable, isReserved FROM Cars WHERE CarID = ?";
+            try (PreparedStatement checkPst = con.prepareStatement(checkQuery)) {
+                checkPst.setString(1, selectedCarID);
+                try (ResultSet rs = checkPst.executeQuery()) {
+                    if (rs.next()) {
+                        boolean isAvailable = rs.getBoolean("isAvailable");
+                        boolean isReserved = rs.getBoolean("isReserved");
 
-            pst.setString(1, selectedCarID); 
-
-            int rowsDeleted = pst.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                JOptionPane.showMessageDialog(new JFrame(), "Car deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
-
-                CarIDCB.setSelectedIndex(-1);  
-
-                populateCarIDs();  
-
-            } else {
-                JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        if (isReserved) {
+                            JOptionPane.showMessageDialog(new JFrame(), "This car is reserved and cannot be deleted.", "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        } else if (!isAvailable) {
+                            JOptionPane.showMessageDialog(new JFrame(), "This car is not available and cannot be deleted.", "Error", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                }
             }
 
-            pst.close();
+            // Step 2: Proceed to delete the car if it is available and not reserved
+            String deleteQuery = "DELETE FROM Cars WHERE CarID = ?";
+            try (PreparedStatement deletePst = con.prepareStatement(deleteQuery)) {
+                deletePst.setString(1, selectedCarID);
+
+                int rowsDeleted = deletePst.executeUpdate();
+
+                if (rowsDeleted > 0) {
+                    JOptionPane.showMessageDialog(new JFrame(), "Car deleted successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
+                    CarIDCB.setSelectedIndex(-1);  // Clear selection
+                    populateCarIDs();  // Refresh the combo box or table
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "No car found with the specified Car ID.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
             con.close();
 
         } catch (SQLException e) {

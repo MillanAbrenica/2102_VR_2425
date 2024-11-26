@@ -3,6 +3,7 @@ package vehicle_rental_system;
 import Home_Admin.*;
 import Home_Client.*;
 import Home_Client.Home_client;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -56,8 +57,9 @@ public class Login extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Email");
 
+        email.setBackground(new java.awt.Color(0, 0, 0));
         email.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        email.setForeground(new java.awt.Color(102, 102, 102));
+        email.setForeground(new java.awt.Color(255, 255, 255));
         email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 emailActionPerformed(evt);
@@ -69,9 +71,16 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(0, 0, 0));
         jLabel3.setText("Password");
 
+        password.setBackground(new java.awt.Color(0, 0, 0));
+        password.setForeground(new java.awt.Color(255, 255, 255));
         password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 passwordActionPerformed(evt);
+            }
+        });
+        password.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passwordKeyPressed(evt);
             }
         });
 
@@ -84,8 +93,13 @@ public class Login extends javax.swing.JFrame {
                 LoginBtnActionPerformed(evt);
             }
         });
+        LoginBtn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                LoginBtnKeyPressed(evt);
+            }
+        });
 
-        SignupBtn.setBackground(new java.awt.Color(102, 102, 102));
+        SignupBtn.setBackground(new java.awt.Color(0, 0, 0));
         SignupBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         SignupBtn.setForeground(new java.awt.Color(255, 255, 255));
         SignupBtn.setText("Sign Up");
@@ -147,7 +161,7 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.add(Left, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 0, -1, -1));
 
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/login.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/Login new.png"))); // NOI18N
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -173,61 +187,74 @@ public class Login extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_SignupBtnActionPerformed
 
+    public static int loggedInClientID = -1; 
+    public static String loggedInClientName = null;
+    
     private void LoginBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoginBtnActionPerformed
-         String Email, Password, query, fname = null, passDb = null, roleDb = null;
-         String SUrl, SUser, SPass;
-         SUrl = "Jdbc:MySql://localhost:3306/vehiclerentaldb";
-         SUser = "root";
-         SPass = "";
-         int notFound = 0;
+        String Email, Password, query, fname = null, passDb = null, roleDb = null;
+        String SUrl, SUser, SPass;
+        SUrl = "Jdbc:MySql://localhost:3306/vehiclerentaldb";
+        SUser = "root";
+        SPass = "";
+        int notFound = 0;
 
-         try {
-             Class.forName("com.mysql.cj.jdbc.Driver");
-             Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
-             Statement st = con.createStatement();
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(SUrl, SUser, SPass);
+            Statement st = con.createStatement();
 
-             if ("".equals(email.getText())) {
-                 JOptionPane.showMessageDialog(new JFrame(), "Email Address is required", "Error",
-                         JOptionPane.ERROR_MESSAGE);
-             } else if ("".equals(password.getText())) {
-                 JOptionPane.showMessageDialog(new JFrame(), "Password is required", "Error",
-                         JOptionPane.ERROR_MESSAGE);
-             } else {
-                 Email = email.getText();
-                 Password = password.getText();
+            if ("".equals(email.getText())) {
+                JOptionPane.showMessageDialog(new JFrame(), "Email Address is required", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else if ("".equals(password.getText())) {
+                JOptionPane.showMessageDialog(new JFrame(), "Password is required", "Error",
+                        JOptionPane.ERROR_MESSAGE);
+            } else {
+                Email = email.getText();
+                Password = password.getText();
 
-                 query = "SELECT * FROM admin WHERE email= '" + Email + "' UNION SELECT * FROM client WHERE email= '" + Email + "'";
-                 ResultSet rs = st.executeQuery(query);
+                query = "SELECT * FROM admin WHERE email= '" + Email + "' UNION SELECT * FROM client WHERE email= '" + Email + "'";
+                ResultSet rs = st.executeQuery(query);
 
-                 while (rs.next()) {
-                     passDb = rs.getString("password");
-                     fname = rs.getString("full_name");
-                     roleDb = rs.getString("role");
-                     notFound = 1;
-                 }
+                while (rs.next()) {
+                    passDb = rs.getString("password");
+                    fname = rs.getString("full_name");
+                    roleDb = rs.getString("role");
+                    if ("Client".equalsIgnoreCase(roleDb)) {
+                        loggedInClientID = rs.getInt("id"); // Store Client ID
+                        loggedInClientName = fname;        // Store Client Name
+                    }
+                    notFound = 1;
+                }
 
-                 if (notFound == 1 && Password.equals(passDb)) {
-                     if ("Admin".equalsIgnoreCase(roleDb)) {
-                         Home_admin HomeFrame = new Home_admin(); 
-                         HomeFrame.setVisible(true);
-                         HomeFrame.pack();
-                         HomeFrame.setLocationRelativeTo(null);
-                     } else if ("Client".equalsIgnoreCase(roleDb)) {
-                         Home_client HomeFrame = new Home_client(); 
-                         HomeFrame.setVisible(true);
-                         HomeFrame.pack();
-                         HomeFrame.setLocationRelativeTo(null);
-                     }
-                     this.dispose(); 
-                 } else {
-                     JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
-                             JOptionPane.ERROR_MESSAGE);
-                 }
-                 password.setText("");
-             }
-         } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-         }
+                if (notFound == 1 && Password.equals(passDb)) {
+                    
+                     JOptionPane.showMessageDialog(this, 
+                        "Welcome, " + fname + "! You are successfully logged in.", 
+                        "Login Successful", 
+                        JOptionPane.INFORMATION_MESSAGE);
+                     
+                    if ("Admin".equalsIgnoreCase(roleDb)) {
+                        Home_admin HomeFrame = new Home_admin();
+                        HomeFrame.setVisible(true);
+                        HomeFrame.pack();
+                        HomeFrame.setLocationRelativeTo(null);
+                    } else if ("Client".equalsIgnoreCase(roleDb)) {
+                        Home_client HomeFrame = new Home_client();
+                        HomeFrame.setVisible(true);
+                        HomeFrame.pack();
+                        HomeFrame.setLocationRelativeTo(null);
+                    }
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(new JFrame(), "Incorrect email or password", "Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+                password.setText("");
+            }
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
     }//GEN-LAST:event_LoginBtnActionPerformed
 
     private void passwordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_passwordActionPerformed
@@ -237,6 +264,18 @@ public class Login extends javax.swing.JFrame {
     private void emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_emailActionPerformed
     
     }//GEN-LAST:event_emailActionPerformed
+
+    private void passwordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passwordKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            LoginBtnActionPerformed(null);
+        }
+    }//GEN-LAST:event_passwordKeyPressed
+
+    private void LoginBtnKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_LoginBtnKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER){
+            LoginBtnActionPerformed(null);
+        }
+    }//GEN-LAST:event_LoginBtnKeyPressed
 
     /**
      * @param args the command line arguments

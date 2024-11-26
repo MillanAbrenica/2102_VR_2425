@@ -10,6 +10,7 @@ public class Home_admin extends javax.swing.JFrame {
     
     public Home_admin() {
         initComponents();
+        setLocationRelativeTo(null);
     }
 
     @SuppressWarnings("unchecked")
@@ -29,71 +30,86 @@ public class Home_admin extends javax.swing.JFrame {
         setTitle("HOME");
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel1.setPreferredSize(new java.awt.Dimension(800, 500));
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        ReserveListBtn.setBackground(new java.awt.Color(255, 255, 255));
-        ReserveListBtn.setForeground(new java.awt.Color(0, 0, 0));
+        ReserveListBtn.setBackground(new java.awt.Color(0, 0, 0));
+        ReserveListBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ReserveListBtn.setForeground(new java.awt.Color(255, 255, 255));
+        ReserveListBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/reservation.png"))); // NOI18N
         ReserveListBtn.setText("Reserve List");
+        ReserveListBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ReserveListBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ReserveListBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ReserveListBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 110, 40));
+        jPanel1.add(ReserveListBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 100, 160, 40));
 
-        ShowRentsBtn.setBackground(new java.awt.Color(0, 0, 0));
-        ShowRentsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        ShowRentsBtn.setBackground(new java.awt.Color(255, 255, 255));
+        ShowRentsBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        ShowRentsBtn.setForeground(new java.awt.Color(0, 0, 0));
+        ShowRentsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/rent List.png"))); // NOI18N
         ShowRentsBtn.setText("Show Rents");
+        ShowRentsBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ShowRentsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ShowRentsBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ShowRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 110, 40));
+        jPanel1.add(ShowRentsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 100, 160, 40));
 
         ViewClientsBtn.setBackground(new java.awt.Color(255, 255, 255));
+        ViewClientsBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         ViewClientsBtn.setForeground(new java.awt.Color(0, 0, 0));
+        ViewClientsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/users-alt.png"))); // NOI18N
         ViewClientsBtn.setText("View Clients");
+        ViewClientsBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         ViewClientsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ViewClientsBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(ViewClientsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 200, 110, 40));
+        jPanel1.add(ViewClientsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 100, 160, 40));
 
-        LogOutBtn.setBackground(new java.awt.Color(255, 255, 255));
-        LogOutBtn.setForeground(new java.awt.Color(0, 0, 0));
-        LogOutBtn.setText("Log Out");
+        LogOutBtn.setBackground(new java.awt.Color(0, 0, 0));
+        LogOutBtn.setForeground(new java.awt.Color(255, 255, 255));
+        LogOutBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/exit.png"))); // NOI18N
         LogOutBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 LogOutBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(LogOutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 340, 110, 40));
+        jPanel1.add(LogOutBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 0, 60, 40));
 
         TotalRevenueBtn.setBackground(new java.awt.Color(0, 0, 0));
+        TotalRevenueBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         TotalRevenueBtn.setForeground(new java.awt.Color(255, 255, 255));
+        TotalRevenueBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/growth.png"))); // NOI18N
         TotalRevenueBtn.setText("Total Revenue");
+        TotalRevenueBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         TotalRevenueBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TotalRevenueBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(TotalRevenueBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 270, 120, 40));
+        jPanel1.add(TotalRevenueBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 100, 180, 40));
 
-        CarsBtn.setBackground(new java.awt.Color(0, 0, 0));
-        CarsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        CarsBtn.setBackground(new java.awt.Color(255, 255, 255));
+        CarsBtn.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        CarsBtn.setForeground(new java.awt.Color(0, 0, 0));
+        CarsBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/car.png"))); // NOI18N
         CarsBtn.setText("Cars");
+        CarsBtn.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         CarsBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 CarsBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(CarsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 200, 110, 40));
+        jPanel1.add(CarsBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 100, 130, 40));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/menu.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 500));
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/backgroundAndicons/New Home_Client.jpg"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 900, 600));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,11 +147,20 @@ public class Home_admin extends javax.swing.JFrame {
     }//GEN-LAST:event_ReserveListBtnActionPerformed
 
     private void LogOutBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutBtnActionPerformed
+            // Show confirmation dialog
+        int confirm = JOptionPane.showConfirmDialog(this, 
+                "Are you sure you want to log out?", 
+                "Confirm Logout", 
+                JOptionPane.YES_NO_OPTION);
+
+        // Check user's choice
+        if (confirm == JOptionPane.YES_OPTION) {
             Login LoginFrame = new Login();
             LoginFrame.setVisible(true);
             LoginFrame.pack();
             LoginFrame.setLocationRelativeTo(null); 
             this.dispose();
+        }
     }//GEN-LAST:event_LogOutBtnActionPerformed
 
     private void CarsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CarsBtnActionPerformed
